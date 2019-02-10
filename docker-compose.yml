@@ -1,0 +1,32 @@
+version: "3"
+services:
+  pg:
+    build: ./postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=core
+    ports:
+      - "5432:5432" # Close this for production
+    networks:
+      - pgnet
+  nats:
+    image: nats:latest
+    ports: # Close these for production
+      - "4222:4222"
+      - "6222:6222"
+      - "8222:8222"
+    networks:
+      - natsnet
+
+  core:
+    build: ./backend-core
+    restart: unless-stopped
+    command: -listen :10200 -postgres postgresql://root@pg:5432/core?sslmode=disable
+    ports:
+      - "10200:10200"
+    networks:
+      - pgnet
+networks:
+  pgnet:
+  natsnet:
