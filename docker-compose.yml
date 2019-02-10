@@ -27,6 +27,14 @@ services:
       - "10200:10200"
     networks:
       - pgnet
+
+  signal:
+    build: ./backend-signal
+    restart: unless-stopped
+    environment:
+      - PORT=10201
+    ports:
+      - "10201:10201"
 networks:
   pgnet:
   natsnet:
