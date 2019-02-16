@@ -25,3 +25,6 @@
 [submodule "backend-login"]
 	path = backend-login
 	url = git@makerforce.io:beep/backend-login.git
+[submodule "backend-heartbeat"]
+	path = backend-heartbeat
+	url = git@makerforce.io:beep/backend-heartbeat.git
