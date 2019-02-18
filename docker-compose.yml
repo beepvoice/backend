@@ -32,11 +32,13 @@ services:
     restart: unless-stopped
     depends_on:
       - pg
+    environment:
+      - LISTEN=:10200
+      - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
     ports:
       - "10200:10200"
     networks:
       - pgnet
-    command: -listen :10200 -postgres postgresql://root@pg:5432/core?sslmode=disable
 
   signal:
     build: ./backend-signal
@@ -53,19 +55,23 @@ services:
     restart: unless-stopped
     depends_on:
       - redis
+    environment:
+      - LISTEN=:10203
+      - REDIS=redis:6379
     ports:
       - "10203:10203"
     networks:
       - redisnet
-    command: -listen :10203 -redis redis:6379
 
   login:
     build: ./backend-login
     tty: true
     restart: unless-stopped
+    environment:
+      - LISTEN=:10204
+      - SECRET=secret
     ports:
       - "10204:10204"
-    command: -listen :10204 -secret secret
 
   # Pipeline
   bite:
@@ -74,11 +80,13 @@ services:
     restart: unless-stopped
     depends_on:
       - nats
+    environment:
+      - LISTEN=:10202
+      - NATS=nats://nats:4222
     ports:
       - "10202:10202"
     networks:
       - natsnet
-    command: -listen :10202 -nats nats://nats:4222
 
   publish:
     build: ./backend-publish
@@ -86,11 +94,14 @@ services:
     restart: unless-stopped
     depends_on:
       - nats
+    environment:
+      - LISTEN=:10205
+      - NATS=nats://nats:4222
+      - SECRET=secret
     ports:
       - "10205:10205"
     networks:
       - natsnet
-    command: -listen :10205 -nats nats://nats:4222 -secret secret
 
   store:
     build: ./backend-store
@@ -98,9 +109,11 @@ services:
     restart: unless-stopped
     depends_on:
       - nats
+    environment:
+      - NATS=nats://nats:4222
+      - DBPATH=/tmp/badger
     networks:
       - natsnet
-    command: -nats nats://nats:4222 -dbpath /tmp/badger
 
   subscribe:
     build: ./backend-subscribe
@@ -108,11 +121,13 @@ services:
     restart: unless-stopped
     depends_on:
       - nats
+    environment:
+      - LISTEN=:10206
+      - NATS=nats://nats:4222
     ports:
       - "10206:10206"
     networks:
       - natsnet
-    command: -listen :10206 -nats nats://nats:4222
 
   transcription:
     build: ./backend-transcription
@@ -120,11 +135,14 @@ services:
     restart: unless-stopped
     depends_on:
       - nats
+    environment:
+      - LISTEN=:10207
+      - NATS=nats://nats:4222
+      - API_KEY=AIzaSyDxSXDefzw9gXCQaVzOCYlRn_vcC9Da9Q0
     ports:
       - "10207:10207"
     networks:
       - natsnet
-    command: -listen :10207 -nats nats://nats:4222 -api-key AIzaSyDxSXDefzw9gXCQaVzOCYlRn_vcC9Da9Q0
 
 networks:
   pgnet:
