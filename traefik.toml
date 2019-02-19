@@ -1,0 +1,121 @@
+[api]
+dashboard = true
+
+[entryPoints]
+[entryPoints.http]
+address = ":80"
+[entryPoints.traefik]
+address = ":8080"
+
+[file]
+# Core
+[backends.core]
+  [backends.core.servers.one]
+  url = "http://core"
+
+[frontends.core]
+backend = "core"
+entrypoints = ["http", "https"]
+  [frontends.core.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.core.routes.one]
+  rule = "PathPrefix: /core/"
+
+# Signal
+[backends.signal]
+  [backends.signal.servers.one]
+  url = "http://signal"
+
+[frontends.signal]
+backend = "signal"
+entrypoints = ["http", "https"]
+  [frontends.signal.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.signal.routes.one]
+  rule = "PathPrefix: /signal/"
+
+# Heartbeat
+[backends.heartbeat]
+  [backends.heartbeat.servers.one]
+  url = "http://heartbeat"
+
+[frontends.heartbeat]
+backend = "heartbeat"
+entrypoints = ["http", "https"]
+  [frontends.heartbeat.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.heartbeat.routes.one]
+  rule = "PathPrefix: /heartbeat/"
+
+# Bite
+[backends.bite]
+  [backends.bite.servers.one]
+  url = "http://bite"
+
+[frontends.bite]
+backend = "bite"
+entrypoints = ["http", "https"]
+  [frontends.bite.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.bite.routes.one]
+  rule = "PathPrefix: /bite/"
+
+# Publish
+[backends.publish]
+  [backends.publish.servers.one]
+  url = "http://publish"
+
+[frontends.publish]
+backend = "publish"
+entrypoints = ["http", "https"]
+  [frontends.publish.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.publish.routes.one]
+  rule = "PathPrefix: /publish/"
+
+# Subscribe
+[backends.subscribe]
+  [backends.subscribe.servers.one]
+  url = "http://subscribe"
+
+[frontends.subscribe]
+backend = "subscribe"
+entrypoints = ["http", "https"]
+  [frontends.subscribe.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.subscribe.routes.one]
+  rule = "PathPrefix: /subscribe/"
+
+# transcription
+[backends.transcription]
+  [backends.transcription.servers.one]
+  url = "http://transcription"
+
+[frontends.transcription]
+backend = "transcription"
+entrypoints = ["http", "https"]
+  [frontends.transcription.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.transcription.routes.one]
+  rule = "PathPrefix: /transcription/"

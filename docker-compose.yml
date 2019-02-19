@@ -1,5 +1,25 @@
 version: "3"
 services:
+  traefik:
+    image: traefik
+    command: --configfile=/traefik.toml
+    depends_on:
+      - core
+      - signal
+      - heartbeat
+      - bite
+      - publish
+      - subscribe
+      - transcription
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - ./traefik.toml:/traefik.toml
+    networks:
+      - traefiknet
+
   pg:
     build: ./backend-core/postgres
     environment:
@@ -33,21 +53,20 @@ services:
     depends_on:
       - pg
     environment:
-      - LISTEN=:10200
+      - LISTEN=:80
       - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
-    ports:
-      - "10200:10200"
     networks:
       - pgnet
+      - traefiknet
 
   signal:
     build: ./backend-signal
     tty: true
     restart: unless-stopped
     environment:
-      - PORT=10201
-    ports:
-      - "10201:10201"
+      - PORT=80
+    networks:
+      - traefiknet
 
   heartbeat:
     build: ./backend-heartbeat
@@ -56,12 +75,11 @@ services:
     depends_on:
       - redis
     environment:
-      - LISTEN=:10203
+      - LISTEN=:80
       - REDIS=redis:6379
-    ports:
-      - "10203:10203"
     networks:
       - redisnet
+      - traefiknet
 
   login:
     build: ./backend-login
@@ -81,12 +99,11 @@ services:
     depends_on:
       - nats
     environment:
-      - LISTEN=:10202
+      - LISTEN=:80
       - NATS=nats://nats:4222
-    ports:
-      - "10202:10202"
     networks:
       - natsnet
+      - traefiknet
 
   publish:
     build: ./backend-publish
@@ -95,13 +112,12 @@ services:
     depends_on:
       - nats
     environment:
-      - LISTEN=:10205
+      - LISTEN=:80
       - NATS=nats://nats:4222
       - SECRET=secret
-    ports:
-      - "10205:10205"
     networks:
       - natsnet
+      - traefiknet
 
   store:
     build: ./backend-store
@@ -122,12 +138,11 @@ services:
     depends_on:
       - nats
     environment:
-      - LISTEN=:10206
+      - LISTEN=:80
       - NATS=nats://nats:4222
-    ports:
-      - "10206:10206"
     networks:
       - natsnet
+      - traefiknet
 
   transcription:
     build: ./backend-transcription
@@ -136,15 +151,15 @@ services:
     depends_on:
       - nats
     environment:
-      - LISTEN=:10207
+      - LISTEN=:80
       - NATS=nats://nats:4222
       - API_KEY=AIzaSyDxSXDefzw9gXCQaVzOCYlRn_vcC9Da9Q0
-    ports:
-      - "10207:10207"
     networks:
       - natsnet
+      - traefiknet
 
 networks:
   pgnet:
   natsnet:
   redisnet:
+  traefiknet:
