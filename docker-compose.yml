@@ -19,6 +19,7 @@ services:
       - ./traefik.toml:/traefik.toml
     networks:
       - traefiknet
+      - authnet
 
   pg:
     build: ./backend-core/postgres
@@ -91,6 +92,18 @@ services:
     ports:
       - "10204:10204"
 
+  auth:
+    build: ./backend-auth
+    tty: true
+    restart: unless-stopped
+    environment:
+      - LISTEN=127.0.0.1:10205
+      - SECRET=secret
+    ports:
+      - "10205:10205" # Remove this for production
+    networks:
+      - authnet
+
   # Pipeline
   bite:
     build: ./backend-bite
@@ -159,6 +172,7 @@ services:
       - traefiknet
 
 networks:
+  authnet:
   pgnet:
   natsnet:
   redisnet:

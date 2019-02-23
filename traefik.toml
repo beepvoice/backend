@@ -4,6 +4,10 @@ dashboard = true
 [entryPoints]
 [entryPoints.http]
 address = ":80"
+  [entryPoints.http.auth.forward]
+  address = "http://auth:10205"
+  trustForwardHeader = true
+  authResponseHeaders = [ "X-User-Claim" ]
 [entryPoints.traefik]
 address = ":8080"
 
