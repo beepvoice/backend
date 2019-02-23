@@ -8,6 +8,8 @@ address = ":80"
   address = "http://auth:10205"
   trustForwardHeader = true
   authResponseHeaders = [ "X-User-Claim" ]
+[entryPoints.login]
+address = ":1837"
 [entryPoints.traefik]
 address = ":8080"
 
@@ -22,7 +24,7 @@ backend = "core"
 entrypoints = ["http", "https"]
   [frontends.core.headers.customresponseheaders]
   Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.core.routes.one]
@@ -38,7 +40,7 @@ backend = "signal"
 entrypoints = ["http", "https"]
   [frontends.signal.headers.customresponseheaders]
   Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.signal.routes.one]
@@ -54,7 +56,7 @@ backend = "heartbeat"
 entrypoints = ["http", "https"]
   [frontends.heartbeat.headers.customresponseheaders]
   Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.heartbeat.routes.one]
@@ -70,7 +72,7 @@ backend = "bite"
 entrypoints = ["http", "https"]
   [frontends.bite.headers.customresponseheaders]
   Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.bite.routes.one]
@@ -86,7 +88,7 @@ backend = "publish"
 entrypoints = ["http", "https"]
   [frontends.publish.headers.customresponseheaders]
   Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.publish.routes.one]
@@ -102,7 +104,7 @@ backend = "subscribe"
 entrypoints = ["http", "https"]
   [frontends.subscribe.headers.customresponseheaders]
   Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.subscribe.routes.one]
@@ -118,7 +120,7 @@ backend = "transcription"
 entrypoints = ["http", "https"]
   [frontends.transcription.headers.customresponseheaders]
   Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.transcription.routes.one]
