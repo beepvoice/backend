@@ -125,3 +125,19 @@ entrypoints = ["http", "https"]
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.transcription.routes.one]
   rule = "PathPrefix: /transcription/"
+
+# login
+[backends.login]
+  [backends.login.servers.one]
+  url = "http://login"
+
+  [frontends.login]
+  backend = "login"
+  entrypoints = ["login", "login_https"]
+  [frontends.login.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.login.routes.one]
+  rule = "PathPrefix: /"

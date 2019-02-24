@@ -14,6 +14,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "1837:1837"
       - "8080:8080"
     volumes:
       - ./traefik.toml:/traefik.toml
@@ -87,10 +88,18 @@ services:
     tty: true
     restart: unless-stopped
     environment:
-      - LISTEN=:10204
+      - LISTEN=:80
       - SECRET=secret
-    ports:
-      - "10204:10204"
+      - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
+      - REDIS=redis:6379
+      - TTL=120s
+      - MESSAGING_SID=MG19d18fafcff1f3f34dff04c5b04c0699
+      - TWILIO_SID=AC22ea3eea85e5108a96b947aea8ab1320
+      - TWILIO_TOKEN=fb23fa1a1564aa9f62a7a3117f07b3a0
+    networks:
+      - traefiknet
+      - redisnet
+      - pgnet
 
   auth:
     build: ./backend-auth
