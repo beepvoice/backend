@@ -28,7 +28,7 @@ entrypoints = ["http", "https"]
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.core.routes.one]
-  rule = "PathPrefix: /core/"
+  rule = "PathPrefixStrip: /core/"
 
 # Signal
 [backends.signal]
@@ -44,7 +44,7 @@ entrypoints = ["http", "https"]
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.signal.routes.one]
-  rule = "PathPrefix: /signal/"
+  rule = "PathPrefixStrip: /signal/"
 
 # Heartbeat
 [backends.heartbeat]
@@ -60,7 +60,7 @@ entrypoints = ["http", "https"]
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.heartbeat.routes.one]
-  rule = "PathPrefix: /heartbeat/"
+  rule = "PathPrefixStrip: /heartbeat/"
 
 # Bite
 [backends.bite]
@@ -76,7 +76,7 @@ entrypoints = ["http", "https"]
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.bite.routes.one]
-  rule = "PathPrefix: /bite/"
+  rule = "PathPrefixStrip: /bite/"
 
 # Publish
 [backends.publish]
@@ -92,7 +92,7 @@ entrypoints = ["http", "https"]
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.publish.routes.one]
-  rule = "PathPrefix: /publish/"
+  rule = "PathPrefixStrip: /publish/"
 
 # Subscribe
 [backends.subscribe]
@@ -108,7 +108,7 @@ entrypoints = ["http", "https"]
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.subscribe.routes.one]
-  rule = "PathPrefix: /subscribe/"
+  rule = "PathPrefixStrip: /subscribe/"
 
 # transcription
 [backends.transcription]
@@ -124,7 +124,7 @@ entrypoints = ["http", "https"]
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.transcription.routes.one]
-  rule = "PathPrefix: /transcription/"
+  rule = "PathPrefixStrip: /transcription/"
 
 # login
 [backends.login]
@@ -140,4 +140,4 @@ entrypoints = ["http", "https"]
   Access-Control-Allow-Credentials = "true"
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.login.routes.one]
-  rule = "PathPrefix: /"
+  rule = "PathPrefixStrip: /"
