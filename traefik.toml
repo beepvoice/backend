@@ -5,7 +5,7 @@ dashboard = true
 [entryPoints.http]
 address = ":80"
   [entryPoints.http.auth.forward]
-  address = "http://auth:10205"
+  address = "http://auth:10205/auth"
   trustForwardHeader = true
   authResponseHeaders = [ "X-User-Claim" ]
 [entryPoints.login]

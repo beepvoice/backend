@@ -11,6 +11,7 @@ services:
       - publish
       - subscribe
       - transcription
+      - auth
     ports:
       - "80:80"
       - "443:443"
@@ -106,7 +107,7 @@ services:
     tty: true
     restart: unless-stopped
     environment:
-      - LISTEN=127.0.0.1:10205
+      - LISTEN=0.0.0.0:10205
       - SECRET=secret
     ports:
       - "10205:10205" # Remove this for production
