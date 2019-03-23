@@ -3,9 +3,13 @@ name: auth
 clone:
   depth: 5
   recursive: true
-  submodule_override:
-    backend-auth: https://git.makerforce.io/beep/backend-auth.git
 steps:
+- name: submodules
+  image: plugins/git
+  settings:
+    recursive: true
+    submodule_override:
+      backend-auth: https://git.makerforce.io/beep/backend-auth.git
 - name: docker
   image: plugins/docker
   settings:
