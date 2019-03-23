@@ -1,191 +1,229 @@
 kind: pipeline
-name: auth
+name: backend-auth
 clone:
   depth: 5
-  recursive: true
 steps:
-- name: submodules
-  image: plugins/git
-  settings:
-    recursive: true
-    submodule_override:
-      backend-auth: https://git.makerforce.io/beep/backend-auth.git
-- name: docker
-  image: plugins/docker
-  settings:
-    registry: registry.makerforce.io
-    repo: registry.makerforce.io/beep/backend-auth
-    context: backend-auth/
-    auto_tag: true
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-auth
+      context: backend-subscribe
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 ---
 kind: pipeline
-name: bite
+name: backend-bite
 clone:
   depth: 5
 steps:
-- name: submodules
-  image: docker:git
-  commands:
-  - git submodule update --init --recursive --remote
-- name: docker
-  image: plugins/docker
-  settings:
-    registry: registry.makerforce.io
-    repo: registry.makerforce.io/beep/backend-bite
-    context: backend-bite/
-    auto_tag: true
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-auth: 'https://git.makerforce.io/beep/backend-bite.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-bite
+      context: backend-subscribe
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 ---
 kind: pipeline
-name: core
+name: backend-core
 clone:
   depth: 5
 steps:
-- name: submodules
-  image: docker:git
-  commands:
-  - git submodule update --init --recursive --remote
-- name: docker
-  image: plugins/docker
-  settings:
-    registry: registry.makerforce.io
-    repo: registry.makerforce.io/beep/backend-core
-    context: backend-core/
-    auto_tag: true
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-auth: 'https://git.makerforce.io/beep/backend-core.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-core
+      context: backend-subscribe
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 ---
 kind: pipeline
-name: heartbeat
+name: backend-heartbeat
 clone:
   depth: 5
 steps:
-- name: submodules
-  image: docker:git
-  commands:
-  - git submodule update --init --recursive --remote
-- name: docker
-  image: plugins/docker
-  settings:
-    registry: registry.makerforce.io
-    repo: registry.makerforce.io/beep/backend-heartbeat
-    context: backend-heartbeat/
-    auto_tag: true
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-auth: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-heartbeat
+      context: backend-subscribe
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 ---
 kind: pipeline
-name: login
+name: backend-login
 clone:
   depth: 5
 steps:
-- name: submodules
-  image: docker:git
-  commands:
-  - git submodule update --init --recursive --remote
-- name: docker
-  image: plugins/docker
-  settings:
-    registry: registry.makerforce.io
-    repo: registry.makerforce.io/beep/backend-login
-    context: backend-login/
-    auto_tag: true
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-auth: 'https://git.makerforce.io/beep/backend-login.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-login
+      context: backend-subscribe
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 ---
 kind: pipeline
-name: publish
+name: backend-publish
 clone:
   depth: 5
 steps:
-- name: submodules
-  image: docker:git
-  commands:
-  - git submodule update --init --recursive --remote
-- name: docker
-  image: plugins/docker
-  settings:
-    registry: registry.makerforce.io
-    repo: registry.makerforce.io/beep/backend-publish
-    context: backend-publish/
-    auto_tag: true
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-auth: 'https://git.makerforce.io/beep/backend-publish.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-publish
+      context: backend-subscribe
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 ---
 kind: pipeline
-name: signal
+name: backend-signal
 clone:
   depth: 5
 steps:
-- name: submodules
-  image: docker:git
-  commands:
-  - git submodule update --init --recursive --remote
-- name: docker
-  image: plugins/docker
-  settings:
-    registry: registry.makerforce.io
-    repo: registry.makerforce.io/beep/backend-signal
-    context: backend-signal/
-    auto_tag: true
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-auth: 'https://git.makerforce.io/beep/backend-signal.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-signal
+      context: backend-subscribe
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 ---
 kind: pipeline
-name: store
+name: backend-store
 clone:
   depth: 5
 steps:
-- name: submodules
-  image: docker:git
-  commands:
-  - git submodule update --init --recursive --remote
-- name: docker
-  image: plugins/docker
-  settings:
-    registry: registry.makerforce.io
-    repo: registry.makerforce.io/beep/backend-store
-    context: backend-store/
-    auto_tag: true
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-auth: 'https://git.makerforce.io/beep/backend-store.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-store
+      context: backend-subscribe
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 ---
 kind: pipeline
-name: subscribe
+name: backend-subscribe
 clone:
   depth: 5
 steps:
-- name: submodules
-  image: docker:git
-  commands:
-  - git submodule update --init --recursive --remote
-- name: docker
-  image: plugins/docker
-  settings:
-    registry: registry.makerforce.io
-    repo: registry.makerforce.io/beep/backend-subscribe
-    context: backend-subscribe/
-    auto_tag: true
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-auth: 'https://git.makerforce.io/beep/backend-subscribe.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-subscribe
+      context: backend-subscribe
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+---
+kind: pipeline
+name: backend-transcription
+clone:
+  depth: 5
+steps:
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-auth: 'https://git.makerforce.io/beep/backend-transcription.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-transcription
+      context: backend-subscribe
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password

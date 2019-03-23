@@ -1,0 +1,9 @@
+{
+  "name": "backend",
+  "version": "0.1.7",
+  "author": "Beep",
+  "private": true,
+  "dependencies": {
+    "js-yaml": "^3.13.0"
+  }
+}
