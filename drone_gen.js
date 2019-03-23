@@ -77,6 +77,7 @@ const deploy = {
 				},
 				source: [
 					'docker-compose.staging.yml',
+					'traefik.staging.toml',
 				],
 				target: '/home/core/staging',
 			},
