@@ -1,0 +1,190 @@
+#
+# Deployment
+#
+# Requirements
+# ./traefik.staging.toml
+# ./backend-core/postgres
+#
+
+version: "3"
+services:
+
+  traefik:
+    image: traefik
+    command: --configfile=/traefik.toml
+    depends_on:
+      - core
+      - signal
+      - heartbeat
+      - bite
+      - publish
+      - subscribe
+      - transcription
+      - auth
+    ports:
+      - "80:80"
+      - "443:443"
+      - "1837:1837"
+      - "8080:8080"
+    volumes:
+      - ./traefik.staging.toml:/traefik.toml:ro
+    networks:
+      - traefiknet
+      - authnet
+
+  pg:
+    image: postgres:10.3
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=core
+    ports:
+      - "5432:5432" # Close this for production
+    volumes:
+      - ./backend-core/postgres:/docker-entrypoint-initdb.d:ro
+    networks:
+      - pgnet
+
+  nats:
+    image: nats:latest
+    ports: # Close these for production
+      - "4222:4222"
+      - "6222:6222"
+      - "8222:8222"
+    networks:
+      - natsnet
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379" # Close this for production
+    networks:
+      - redisnet
+
+  core:
+    image: registry.makerforce.io/beep/backend-core:latest
+    restart: unless-stopped
+    depends_on:
+      - pg
+    environment:
+      - LISTEN=:80
+      - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
+    networks:
+      - pgnet
+      - traefiknet
+
+  signal:
+    image: registry.makerforce.io/beep/backend-signal:latest
+    restart: unless-stopped
+    environment:
+      - PORT=80
+    networks:
+      - traefiknet
+
+  heartbeat:
+    image: registry.makerforce.io/beep/backend-heartbeat:latest
+    restart: unless-stopped
+    depends_on:
+      - redis
+    environment:
+      - LISTEN=:80
+      - REDIS=redis:6379
+    networks:
+      - redisnet
+      - traefiknet
+
+  login:
+    image: registry.makerforce.io/beep/backend-login:latest
+    restart: unless-stopped
+    environment:
+      - LISTEN=:80
+      - SECRET=secret
+      - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
+      - REDIS=redis:6379
+      - TTL=120s
+      - MESSAGING_SID=MG19d18fafcff1f3f34dff04c5b04c0699
+      - TWILIO_SID=AC22ea3eea85e5108a96b947aea8ab1320
+      - TWILIO_TOKEN=fb23fa1a1564aa9f62a7a3117f07b3a0
+    networks:
+      - traefiknet
+      - redisnet
+      - pgnet
+
+  auth:
+    image: registry.makerforce.io/beep/backend-auth:latest
+    restart: unless-stopped
+    environment:
+      - LISTEN=0.0.0.0:10205
+      - SECRET=secret
+    ports:
+      - "10205:10205" # Remove this for production
+    networks:
+      - authnet
+
+  bite:
+    image: registry.makerforce.io/beep/backend-bite:latest
+    restart: unless-stopped
+    depends_on:
+      - nats
+    environment:
+      - LISTEN=:80
+      - NATS=nats://nats:4222
+    networks:
+      - natsnet
+      - traefiknet
+
+  publish:
+    image: registry.makerforce.io/beep/backend-publish:latest
+    restart: unless-stopped
+    depends_on:
+      - nats
+    environment:
+      - LISTEN=:80
+      - NATS=nats://nats:4222
+      - SECRET=secret
+    networks:
+      - natsnet
+      - traefiknet
+
+  store:
+    image: registry.makerforce.io/beep/backend-store:latest
+    restart: unless-stopped
+    depends_on:
+      - nats
+    environment:
+      - NATS=nats://nats:4222
+      - DBPATH=/tmp/badger
+    networks:
+      - natsnet
+
+  subscribe:
+    image: registry.makerforce.io/beep/backend-subscribe:latest
+    restart: unless-stopped
+    depends_on:
+      - nats
+    environment:
+      - LISTEN=:80
+      - NATS=nats://nats:4222
+    networks:
+      - natsnet
+      - traefiknet
+
+  transcription:
+    image: registry.makerforce.io/beep/backend-transcription:latest
+    restart: unless-stopped
+    depends_on:
+      - nats
+    environment:
+      - LISTEN=:80
+      - NATS=nats://nats:4222
+      - API_KEY=AIzaSyDxSXDefzw9gXCQaVzOCYlRn_vcC9Da9Q0
+    networks:
+      - natsnet
+      - traefiknet
+
+networks:
+  authnet:
+  pgnet:
+  natsnet:
+  redisnet:
+  traefiknet:
