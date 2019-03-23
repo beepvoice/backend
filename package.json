@@ -1,0 +1,12 @@
+{
+  "name": "backend",
+  "version": "0.1.7",
+  "author": "Beep",
+  "private": true,
+  "scripts": {
+    "generate": "node drone_gen.js"
+  },
+  "dependencies": {
+    "js-yaml": "^3.13.0"
+  }
+}
