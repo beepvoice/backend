@@ -1,7 +1,7 @@
 kind: pipeline
 name: backend-auth
 clone:
-  depth: 5
+  depth: 1
 steps:
   - name: submodule
     image: plugins/git
@@ -9,12 +9,23 @@ steps:
       recursive: true
       submodule_override:
         backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-bite: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
+        backend-publish: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-signal: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-subscribe: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.makerforce.io
       repo: registry.makerforce.io/beep/backend-auth
-      context: backend-subscribe
+      context: backend-auth
+      dockerfile: backend-auth/Dockerfile
       auto_tag: true
       username:
         from_secret: docker_username
@@ -24,20 +35,31 @@ steps:
 kind: pipeline
 name: backend-bite
 clone:
-  depth: 5
+  depth: 1
 steps:
   - name: submodule
     image: plugins/git
     settings:
       recursive: true
       submodule_override:
-        backend-auth: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-bite: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
+        backend-publish: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-signal: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-subscribe: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.makerforce.io
       repo: registry.makerforce.io/beep/backend-bite
-      context: backend-subscribe
+      context: backend-bite
+      dockerfile: backend-bite/Dockerfile
       auto_tag: true
       username:
         from_secret: docker_username
@@ -47,20 +69,31 @@ steps:
 kind: pipeline
 name: backend-core
 clone:
-  depth: 5
+  depth: 1
 steps:
   - name: submodule
     image: plugins/git
     settings:
       recursive: true
       submodule_override:
-        backend-auth: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-bite: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
+        backend-publish: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-signal: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-subscribe: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.makerforce.io
       repo: registry.makerforce.io/beep/backend-core
-      context: backend-subscribe
+      context: backend-core
+      dockerfile: backend-core/Dockerfile
       auto_tag: true
       username:
         from_secret: docker_username
@@ -70,20 +103,31 @@ steps:
 kind: pipeline
 name: backend-heartbeat
 clone:
-  depth: 5
+  depth: 1
 steps:
   - name: submodule
     image: plugins/git
     settings:
       recursive: true
       submodule_override:
-        backend-auth: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-bite: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
+        backend-publish: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-signal: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-subscribe: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.makerforce.io
       repo: registry.makerforce.io/beep/backend-heartbeat
-      context: backend-subscribe
+      context: backend-heartbeat
+      dockerfile: backend-heartbeat/Dockerfile
       auto_tag: true
       username:
         from_secret: docker_username
@@ -93,20 +137,31 @@ steps:
 kind: pipeline
 name: backend-login
 clone:
-  depth: 5
+  depth: 1
 steps:
   - name: submodule
     image: plugins/git
     settings:
       recursive: true
       submodule_override:
-        backend-auth: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-bite: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
+        backend-publish: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-signal: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-subscribe: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.makerforce.io
       repo: registry.makerforce.io/beep/backend-login
-      context: backend-subscribe
+      context: backend-login
+      dockerfile: backend-login/Dockerfile
       auto_tag: true
       username:
         from_secret: docker_username
@@ -116,20 +171,31 @@ steps:
 kind: pipeline
 name: backend-publish
 clone:
-  depth: 5
+  depth: 1
 steps:
   - name: submodule
     image: plugins/git
     settings:
       recursive: true
       submodule_override:
-        backend-auth: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-bite: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
+        backend-publish: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-signal: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-subscribe: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.makerforce.io
       repo: registry.makerforce.io/beep/backend-publish
-      context: backend-subscribe
+      context: backend-publish
+      dockerfile: backend-publish/Dockerfile
       auto_tag: true
       username:
         from_secret: docker_username
@@ -139,20 +205,31 @@ steps:
 kind: pipeline
 name: backend-signal
 clone:
-  depth: 5
+  depth: 1
 steps:
   - name: submodule
     image: plugins/git
     settings:
       recursive: true
       submodule_override:
-        backend-auth: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-bite: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
+        backend-publish: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-signal: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-subscribe: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.makerforce.io
       repo: registry.makerforce.io/beep/backend-signal
-      context: backend-subscribe
+      context: backend-signal
+      dockerfile: backend-signal/Dockerfile
       auto_tag: true
       username:
         from_secret: docker_username
@@ -162,20 +239,31 @@ steps:
 kind: pipeline
 name: backend-store
 clone:
-  depth: 5
+  depth: 1
 steps:
   - name: submodule
     image: plugins/git
     settings:
       recursive: true
       submodule_override:
-        backend-auth: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-bite: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
+        backend-publish: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-signal: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-subscribe: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.makerforce.io
       repo: registry.makerforce.io/beep/backend-store
-      context: backend-subscribe
+      context: backend-store
+      dockerfile: backend-store/Dockerfile
       auto_tag: true
       username:
         from_secret: docker_username
@@ -185,20 +273,31 @@ steps:
 kind: pipeline
 name: backend-subscribe
 clone:
-  depth: 5
+  depth: 1
 steps:
   - name: submodule
     image: plugins/git
     settings:
       recursive: true
       submodule_override:
-        backend-auth: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-bite: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
+        backend-publish: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-signal: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-subscribe: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.makerforce.io
       repo: registry.makerforce.io/beep/backend-subscribe
       context: backend-subscribe
+      dockerfile: backend-subscribe/Dockerfile
       auto_tag: true
       username:
         from_secret: docker_username
@@ -208,22 +307,54 @@ steps:
 kind: pipeline
 name: backend-transcription
 clone:
-  depth: 5
+  depth: 1
 steps:
   - name: submodule
     image: plugins/git
     settings:
       recursive: true
       submodule_override:
-        backend-auth: 'https://git.makerforce.io/beep/backend-transcription.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-bite: 'https://git.makerforce.io/beep/backend-bite.git'
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
+        backend-publish: 'https://git.makerforce.io/beep/backend-publish.git'
+        backend-signal: 'https://git.makerforce.io/beep/backend-signal.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-subscribe: 'https://git.makerforce.io/beep/backend-subscribe.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.makerforce.io
       repo: registry.makerforce.io/beep/backend-transcription
-      context: backend-subscribe
+      context: backend-transcription
+      dockerfile: backend-transcription/Dockerfile
       auto_tag: true
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
+---
+kind: pipeline
+name: deploy
+clone:
+  depth: 1
+steps:
+  - name: nop
+    image: 'alpine:3.8'
+    commands:
+      - echo nop
+depends_on:
+  - backend-auth
+  - backend-bite
+  - backend-core
+  - backend-heartbeat
+  - backend-login
+  - backend-publish
+  - backend-signal
+  - backend-store
+  - backend-subscribe
+  - backend-transcription
