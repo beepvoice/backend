@@ -1,6 +1,12 @@
 kind: pipeline
 name: auth
+clone:
+  depth: 5
 steps:
+- name: submodules
+  image: docker:git
+  commands:
+  - git submodule update --recursive --remote
 - name: docker
   image: plugins/docker
   settings:
@@ -15,7 +21,13 @@ steps:
 ---
 kind: pipeline
 name: bite
+clone:
+  depth: 5
 steps:
+- name: submodules
+  image: docker:git
+  commands:
+  - git submodule update --recursive --remote
 - name: docker
   image: plugins/docker
   settings:
@@ -30,7 +42,13 @@ steps:
 ---
 kind: pipeline
 name: core
+clone:
+  depth: 5
 steps:
+- name: submodules
+  image: docker:git
+  commands:
+  - git submodule update --recursive --remote
 - name: docker
   image: plugins/docker
   settings:
@@ -45,7 +63,13 @@ steps:
 ---
 kind: pipeline
 name: heartbeat
+clone:
+  depth: 5
 steps:
+- name: submodules
+  image: docker:git
+  commands:
+  - git submodule update --recursive --remote
 - name: docker
   image: plugins/docker
   settings:
@@ -60,7 +84,13 @@ steps:
 ---
 kind: pipeline
 name: login
+clone:
+  depth: 5
 steps:
+- name: submodules
+  image: docker:git
+  commands:
+  - git submodule update --recursive --remote
 - name: docker
   image: plugins/docker
   settings:
@@ -75,7 +105,13 @@ steps:
 ---
 kind: pipeline
 name: publish
+clone:
+  depth: 5
 steps:
+- name: submodules
+  image: docker:git
+  commands:
+  - git submodule update --recursive --remote
 - name: docker
   image: plugins/docker
   settings:
@@ -90,7 +126,13 @@ steps:
 ---
 kind: pipeline
 name: signal
+clone:
+  depth: 5
 steps:
+- name: submodules
+  image: docker:git
+  commands:
+  - git submodule update --recursive --remote
 - name: docker
   image: plugins/docker
   settings:
@@ -105,7 +147,13 @@ steps:
 ---
 kind: pipeline
 name: store
+clone:
+  depth: 5
 steps:
+- name: submodules
+  image: docker:git
+  commands:
+  - git submodule update --recursive --remote
 - name: docker
   image: plugins/docker
   settings:
@@ -120,7 +168,13 @@ steps:
 ---
 kind: pipeline
 name: subscribe
+clone:
+  depth: 5
 steps:
+- name: submodules
+  image: docker:git
+  commands:
+  - git submodule update --recursive --remote
 - name: docker
   image: plugins/docker
   settings:
