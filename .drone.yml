@@ -1,0 +1,134 @@
+kind: pipeline
+name: auth
+steps:
+- name: docker
+  image: plugins/docker
+  settings:
+    registry: registry.makerforce.io
+    repo: registry.makerforce.io/beep/backend-auth
+    context: backend-auth/
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+---
+kind: pipeline
+name: bite
+steps:
+- name: docker
+  image: plugins/docker
+  settings:
+    registry: registry.makerforce.io
+    repo: registry.makerforce.io/beep/backend-bite
+    context: backend-bite/
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+---
+kind: pipeline
+name: core
+steps:
+- name: docker
+  image: plugins/docker
+  settings:
+    registry: registry.makerforce.io
+    repo: registry.makerforce.io/beep/backend-core
+    context: backend-core/
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+---
+kind: pipeline
+name: heartbeat
+steps:
+- name: docker
+  image: plugins/docker
+  settings:
+    registry: registry.makerforce.io
+    repo: registry.makerforce.io/beep/backend-heartbeat
+    context: backend-heartbeat/
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+---
+kind: pipeline
+name: login
+steps:
+- name: docker
+  image: plugins/docker
+  settings:
+    registry: registry.makerforce.io
+    repo: registry.makerforce.io/beep/backend-login
+    context: backend-login/
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+---
+kind: pipeline
+name: publish
+steps:
+- name: docker
+  image: plugins/docker
+  settings:
+    registry: registry.makerforce.io
+    repo: registry.makerforce.io/beep/backend-publish
+    context: backend-publish/
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+---
+kind: pipeline
+name: signal
+steps:
+- name: docker
+  image: plugins/docker
+  settings:
+    registry: registry.makerforce.io
+    repo: registry.makerforce.io/beep/backend-signal
+    context: backend-signal/
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+---
+kind: pipeline
+name: store
+steps:
+- name: docker
+  image: plugins/docker
+  settings:
+    registry: registry.makerforce.io
+    repo: registry.makerforce.io/beep/backend-store
+    context: backend-store/
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+---
+kind: pipeline
+name: subscribe
+steps:
+- name: docker
+  image: plugins/docker
+  settings:
+    registry: registry.makerforce.io
+    repo: registry.makerforce.io/beep/backend-subscribe
+    context: backend-subscribe/
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
