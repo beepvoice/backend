@@ -59,11 +59,57 @@ const deploy = {
 	},
 	steps: [
 		{
-			name: 'nop',
-			image: 'alpine:3.8',
-			commands: [
-				'echo nop',
-			],
+			name: 'submodule',
+			image: 'plugins/git',
+			settings: {
+				recursive: true,
+				submodule_override,
+			},
+		},
+		{
+			name: 'copy-docker-compose',
+			image: 'appleboy/drone-scp',
+			settings: {
+				host: 'staging.beepvoice.app',
+				username: 'core',
+				ssh_key: {
+					from_secret: 'ssh_key',
+				},
+				source: [
+					'docker-compose.staging.yml',
+				],
+				target: '/home/core/staging',
+			},
+		},
+		{
+			name: 'copy-migrations',
+			image: 'appleboy/drone-scp',
+			settings: {
+				host: 'staging.beepvoice.app',
+				username: 'core',
+				ssh_key: {
+					from_secret: 'ssh_key',
+				},
+				source: [
+					'backend-core/postgres/*',
+				],
+				target: '/home/core/staging/backend-core/postgres',
+			},
+		},
+		{
+			name: 'docker-compose-up',
+			image: 'appleboy/drone-ssh',
+			settings: {
+				host: 'staging.beepvoice.app',
+				username: 'core',
+				ssh_key: {
+					from_secret: 'ssh_key',
+				},
+				script: [
+					'cd /home/core/staging && docker-compose -f docker-compose.staging.yml pull',
+					'cd /home/core/staging && docker-compose -f docker-compose.staging.yml up -d',
+				],
+			},
 		},
 	],
 	depends_on: dockers,

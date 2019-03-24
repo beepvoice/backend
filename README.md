@@ -93,3 +93,6 @@ URL: `<base-url>/transcription`
 `transcription` takes the raw audio data, packages it and then sends it to the [Google Cloud Speech-to-Text](https://cloud.google.com/speech-to-text/). Sends the transcripted result to `store` to be stored. Handles HTTP requests to retrieve transcriptions too.
 
 `transcription` relies on a running `nats` instance. Is insecure if not behind `traefik` calling `auth`.
+
+## Staging
+
