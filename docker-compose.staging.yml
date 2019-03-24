@@ -2,36 +2,11 @@
 # Deployment
 #
 # Requirements
-# ./traefik.staging.toml
 # ./backend-core/postgres
 #
 
 version: "3"
 services:
-
-  traefik:
-    image: traefik
-    command: --configfile=/traefik.toml
-    depends_on:
-      - core
-      - signal
-      - heartbeat
-      - bite
-      - publish
-      - subscribe
-      - transcription
-      - auth
-    ports:
-      - "80:80"
-      - "443:443"
-      - "1837:1837"
-      - "8080:8080"
-    volumes:
-      - ./traefik.staging.toml:/traefik.toml:ro
-      - ./acme-staging.json:/acme-staging.json
-    networks:
-      - traefiknet
-      - authnet
 
   pg:
     image: postgres:10.3
@@ -73,6 +48,12 @@ services:
     networks:
       - pgnet
       - traefiknet
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/core/
+      - traefik.frontend.auth.forward.address=http://auth:10205/auth
+      - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
+      - traefik.port=80
 
   signal:
     image: registry.makerforce.io/beep/backend-signal:latest
@@ -81,6 +62,12 @@ services:
       - PORT=80
     networks:
       - traefiknet
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/signal/
+      - traefik.frontend.auth.forward.address=http://auth:10205/auth
+      - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
+      - traefik.port=80
 
   heartbeat:
     image: registry.makerforce.io/beep/backend-heartbeat:latest
@@ -93,6 +80,12 @@ services:
     networks:
       - redisnet
       - traefiknet
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/heartbeat/
+      - traefik.frontend.auth.forward.address=http://auth:10205/auth
+      - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
+      - traefik.port=80
 
   login:
     image: registry.makerforce.io/beep/backend-login:latest
@@ -110,6 +103,10 @@ services:
       - traefiknet
       - redisnet
       - pgnet
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/login/
+      - traefik.port=80
 
   auth:
     image: registry.makerforce.io/beep/backend-auth:latest
@@ -133,6 +130,12 @@ services:
     networks:
       - natsnet
       - traefiknet
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/bite/
+      - traefik.frontend.auth.forward.address=http://auth:10205/auth
+      - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
+      - traefik.port=80
 
   publish:
     image: registry.makerforce.io/beep/backend-publish:latest
@@ -146,6 +149,12 @@ services:
     networks:
       - natsnet
       - traefiknet
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/publish/
+      - traefik.frontend.auth.forward.address=http://auth:10205/auth
+      - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
+      - traefik.port=80
 
   store:
     image: registry.makerforce.io/beep/backend-store:latest
@@ -169,6 +178,12 @@ services:
     networks:
       - natsnet
       - traefiknet
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/subscribe/
+      - traefik.frontend.auth.forward.address=http://auth:10205/auth
+      - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
+      - traefik.port=80
 
   transcription:
     image: registry.makerforce.io/beep/backend-transcription:latest
@@ -182,6 +197,12 @@ services:
     networks:
       - natsnet
       - traefiknet
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/transcription/
+      - traefik.frontend.auth.forward.address=http://auth:10205/auth
+      - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
+      - traefik.port=80
 
 networks:
   authnet:
