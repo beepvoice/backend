@@ -409,6 +409,11 @@ steps:
         - >-
           cd /home/core/staging && /home/core/docker-compose -f
           docker-compose.staging.yml up -d
+  - name: slack
+    image: plugins/slack
+    settings:
+      webhook:
+        from_secret: slack_webhook_beep
 depends_on:
   - backend-auth
   - backend-bite

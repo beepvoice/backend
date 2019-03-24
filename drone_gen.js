@@ -136,6 +136,15 @@ const deploy = {
 				],
 			},
 		},
+		{
+			name: 'slack',
+			image: 'plugins/slack',
+			settings: {
+				webhook: {
+					from_secret: 'slack_webhook_beep',
+				},
+			},
+		},
 	],
 	depends_on: dockers,
 };
