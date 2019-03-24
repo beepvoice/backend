@@ -124,7 +124,7 @@ const deploy = {
 				source: [
 					'backend-core/postgres/*',
 				],
-				target: '/home/core/staging/backend-core/postgres',
+				target: '/home/core/staging',
 			},
 			when: {
 				branch: ['master'],
