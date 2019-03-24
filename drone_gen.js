@@ -72,7 +72,7 @@ const deploy = {
 			settings: {
 				host: 'staging.beepvoice.app',
 				username: 'core',
-				ssh_key: {
+				key: {
 					from_secret: 'ssh_key',
 				},
 				source: [
@@ -88,7 +88,7 @@ const deploy = {
 			settings: {
 				host: 'staging.beepvoice.app',
 				username: 'core',
-				ssh_key: {
+				key: {
 					from_secret: 'ssh_key',
 				},
 				source: [
@@ -103,7 +103,7 @@ const deploy = {
 			settings: {
 				host: 'staging.beepvoice.app',
 				username: 'core',
-				ssh_key: {
+				key: {
 					from_secret: 'ssh_key',
 				},
 				script: [
