@@ -107,8 +107,8 @@ const deploy = {
 					from_secret: 'ssh_key',
 				},
 				script: [
-					'cd /home/core/staging && docker-compose -f docker-compose.staging.yml pull',
-					'cd /home/core/staging && docker-compose -f docker-compose.staging.yml up -d',
+					'cd /home/core/staging && /home/core/docker-compose -f docker-compose.staging.yml pull',
+					'cd /home/core/staging && /home/core/docker-compose -f docker-compose.staging.yml up -d',
 				],
 			},
 		},

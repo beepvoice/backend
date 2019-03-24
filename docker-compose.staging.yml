@@ -28,6 +28,7 @@ services:
       - "8080:8080"
     volumes:
       - ./traefik.staging.toml:/traefik.toml:ro
+      - ./acme-staging.json:/acme-staging.json
     networks:
       - traefiknet
       - authnet
@@ -188,3 +189,5 @@ networks:
   natsnet:
   redisnet:
   traefiknet:
+    external: 
+      name: http
