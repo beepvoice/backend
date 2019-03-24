@@ -47,7 +47,7 @@ services:
       - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
     networks:
       - pgnet
-      - traefiknet
+      - http
     labels:
       - traefik.enable=true
       - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/core/
@@ -61,7 +61,7 @@ services:
     environment:
       - PORT=80
     networks:
-      - traefiknet
+      - http
     labels:
       - traefik.enable=true
       - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/signal/
@@ -79,7 +79,7 @@ services:
       - REDIS=redis:6379
     networks:
       - redisnet
-      - traefiknet
+      - http
     labels:
       - traefik.enable=true
       - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/heartbeat/
@@ -100,7 +100,7 @@ services:
       - TWILIO_SID=AC22ea3eea85e5108a96b947aea8ab1320
       - TWILIO_TOKEN=fb23fa1a1564aa9f62a7a3117f07b3a0
     networks:
-      - traefiknet
+      - http
       - redisnet
       - pgnet
     labels:
@@ -117,7 +117,7 @@ services:
     ports:
       - "10205:10205" # Remove this for production
     networks:
-      - authnet
+      - http
 
   bite:
     image: registry.makerforce.io/beep/backend-bite:latest
@@ -129,7 +129,7 @@ services:
       - NATS=nats://nats:4222
     networks:
       - natsnet
-      - traefiknet
+      - http
     labels:
       - traefik.enable=true
       - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/bite/
@@ -148,7 +148,7 @@ services:
       - SECRET=secret
     networks:
       - natsnet
-      - traefiknet
+      - http
     labels:
       - traefik.enable=true
       - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/publish/
@@ -177,7 +177,7 @@ services:
       - NATS=nats://nats:4222
     networks:
       - natsnet
-      - traefiknet
+      - http
     labels:
       - traefik.enable=true
       - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/subscribe/
@@ -196,7 +196,7 @@ services:
       - API_KEY=AIzaSyDxSXDefzw9gXCQaVzOCYlRn_vcC9Da9Q0
     networks:
       - natsnet
-      - traefiknet
+      - http
     labels:
       - traefik.enable=true
       - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/transcription/
@@ -205,10 +205,9 @@ services:
       - traefik.port=80
 
 networks:
-  authnet:
   pgnet:
   natsnet:
   redisnet:
-  traefiknet:
+  http:
     external: 
       name: http
