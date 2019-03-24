@@ -47,6 +47,9 @@ const yamls = dockers.map(f => ({
 					from_secret: 'docker_password',
 				},
 			},
+			when: {
+				branch: ['master'],
+			},
 		},
 	],
 }))
@@ -105,6 +108,9 @@ const deploy = {
 				],
 				target: '/home/core/staging',
 			},
+			when: {
+				branch: ['master'],
+			},
 		},
 		{
 			name: 'copy-migrations',
@@ -120,6 +126,9 @@ const deploy = {
 				],
 				target: '/home/core/staging/backend-core/postgres',
 			},
+			when: {
+				branch: ['master'],
+			},
 		},
 		{
 			name: 'docker-compose-up',
@@ -134,6 +143,9 @@ const deploy = {
 					'cd /home/core/staging && /home/core/docker-compose -f docker-compose.staging.yml pull',
 					'cd /home/core/staging && /home/core/docker-compose -f docker-compose.staging.yml up -d',
 				],
+			},
+			when: {
+				branch: ['master'],
 			},
 		},
 		{
