@@ -11,7 +11,7 @@ steps:
       key:
         from_secret: ssh_key
       script:
-        - cd /home/core/website && ls
+        - cd /home/core/staging && ls
 ---
 kind: pipeline
 name: backend-auth
