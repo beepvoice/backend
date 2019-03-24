@@ -1,4 +1,19 @@
 kind: pipeline
+name: ssh-test
+clone:
+  depth: 1
+steps:
+  - name: ssh
+    image: appleboy/drone-ssh
+    settings:
+      host: staging.beepvoice.app
+      username: core
+      key:
+        from_secret: ssh_key
+      script:
+        - cd /home/core/website && ls
+---
+kind: pipeline
 name: backend-auth
 clone:
   depth: 1

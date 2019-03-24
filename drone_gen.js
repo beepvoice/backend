@@ -51,6 +51,30 @@ const yamls = dockers.map(f => ({
 	],
 }))
 
+const sshTest = {
+	kind: 'pipeline',
+	name: 'ssh-test',
+	clone: {
+		depth: 1,
+	},
+	steps: [
+		{
+			name: 'ssh',
+			image: 'appleboy/drone-ssh',
+			settings: {
+				host: 'staging.beepvoice.app',
+				username: 'core',
+				key: {
+					from_secret: 'ssh_key',
+				},
+				script: [
+					'cd /home/core/staging && ls'
+				],
+			},
+		},
+	],
+};
+
 const deploy = {
 	kind: 'pipeline',
 	name: 'deploy',
@@ -116,7 +140,7 @@ const deploy = {
 	depends_on: dockers,
 };
 
-const droneyml = [].concat(yamls).concat(deploy).map(yaml.safeDump).join('---\n');
+const droneyml = [].concat(sshTest).concat(yamls).concat(deploy).map(yaml.safeDump).join('---\n');
 
 fs.writeFileSync(path.join(cwd, '.drone.yml'), droneyml);
 console.log('Written to .drone.yml');
