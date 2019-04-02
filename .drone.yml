@@ -1,4 +1,19 @@
 kind: pipeline
+name: ssh-test
+clone:
+  depth: 1
+steps:
+  - name: ssh
+    image: appleboy/drone-ssh
+    settings:
+      host: staging.beepvoice.app
+      username: core
+      key:
+        from_secret: ssh_key
+      script:
+        - cd /home/core/staging && ls
+---
+kind: pipeline
 name: backend-auth
 clone:
   depth: 1
@@ -31,6 +46,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
+    when:
+      branch:
+        - master
 ---
 kind: pipeline
 name: backend-bite
@@ -65,6 +83,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
+    when:
+      branch:
+        - master
 ---
 kind: pipeline
 name: backend-core
@@ -99,6 +120,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
+    when:
+      branch:
+        - master
 ---
 kind: pipeline
 name: backend-heartbeat
@@ -133,6 +157,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
+    when:
+      branch:
+        - master
 ---
 kind: pipeline
 name: backend-login
@@ -167,6 +194,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
+    when:
+      branch:
+        - master
 ---
 kind: pipeline
 name: backend-publish
@@ -201,6 +231,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
+    when:
+      branch:
+        - master
 ---
 kind: pipeline
 name: backend-signal
@@ -235,6 +268,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
+    when:
+      branch:
+        - master
 ---
 kind: pipeline
 name: backend-store
@@ -269,6 +305,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
+    when:
+      branch:
+        - master
 ---
 kind: pipeline
 name: backend-subscribe
@@ -303,6 +342,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
+    when:
+      branch:
+        - master
 ---
 kind: pipeline
 name: backend-transcription
@@ -337,6 +379,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
+    when:
+      branch:
+        - master
 ---
 kind: pipeline
 name: deploy
@@ -364,35 +409,50 @@ steps:
     settings:
       host: staging.beepvoice.app
       username: core
-      ssh_key:
+      key:
         from_secret: ssh_key
       source:
         - docker-compose.staging.yml
+        - traefik.staging.toml
       target: /home/core/staging
+    when:
+      branch:
+        - master
   - name: copy-migrations
     image: appleboy/drone-scp
     settings:
       host: staging.beepvoice.app
       username: core
-      ssh_key:
+      key:
         from_secret: ssh_key
       source:
         - backend-core/postgres/*
-      target: /home/core/staging/backend-core/postgres
+      target: /home/core/staging
+    when:
+      branch:
+        - master
   - name: docker-compose-up
     image: appleboy/drone-ssh
     settings:
       host: staging.beepvoice.app
       username: core
-      ssh_key:
+      key:
         from_secret: ssh_key
       script:
         - >-
-          cd /home/core/staging && docker-compose -f docker-compose.staging.yml
-          pull
+          cd /home/core/staging && /home/core/docker-compose -f
+          docker-compose.staging.yml pull
         - >-
-          cd /home/core/staging && docker-compose -f docker-compose.staging.yml
-          up -d
+          cd /home/core/staging && /home/core/docker-compose -f
+          docker-compose.staging.yml up -d
+    when:
+      branch:
+        - master
+  - name: slack
+    image: plugins/slack
+    settings:
+      webhook:
+        from_secret: slack_webhook_beep
 depends_on:
   - backend-auth
   - backend-bite

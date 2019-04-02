@@ -47,9 +47,36 @@ const yamls = dockers.map(f => ({
 					from_secret: 'docker_password',
 				},
 			},
+			when: {
+				branch: ['master'],
+			},
 		},
 	],
 }))
+
+const sshTest = {
+	kind: 'pipeline',
+	name: 'ssh-test',
+	clone: {
+		depth: 1,
+	},
+	steps: [
+		{
+			name: 'ssh',
+			image: 'appleboy/drone-ssh',
+			settings: {
+				host: 'staging.beepvoice.app',
+				username: 'core',
+				key: {
+					from_secret: 'ssh_key',
+				},
+				script: [
+					'cd /home/core/staging && ls'
+				],
+			},
+		},
+	],
+};
 
 const deploy = {
 	kind: 'pipeline',
@@ -72,13 +99,17 @@ const deploy = {
 			settings: {
 				host: 'staging.beepvoice.app',
 				username: 'core',
-				ssh_key: {
+				key: {
 					from_secret: 'ssh_key',
 				},
 				source: [
 					'docker-compose.staging.yml',
+					'traefik.staging.toml',
 				],
 				target: '/home/core/staging',
+			},
+			when: {
+				branch: ['master'],
 			},
 		},
 		{
@@ -87,13 +118,16 @@ const deploy = {
 			settings: {
 				host: 'staging.beepvoice.app',
 				username: 'core',
-				ssh_key: {
+				key: {
 					from_secret: 'ssh_key',
 				},
 				source: [
 					'backend-core/postgres/*',
 				],
-				target: '/home/core/staging/backend-core/postgres',
+				target: '/home/core/staging',
+			},
+			when: {
+				branch: ['master'],
 			},
 		},
 		{
@@ -102,20 +136,32 @@ const deploy = {
 			settings: {
 				host: 'staging.beepvoice.app',
 				username: 'core',
-				ssh_key: {
+				key: {
 					from_secret: 'ssh_key',
 				},
 				script: [
-					'cd /home/core/staging && docker-compose -f docker-compose.staging.yml pull',
-					'cd /home/core/staging && docker-compose -f docker-compose.staging.yml up -d',
+					'cd /home/core/staging && /home/core/docker-compose -f docker-compose.staging.yml pull',
+					'cd /home/core/staging && /home/core/docker-compose -f docker-compose.staging.yml up -d',
 				],
+			},
+			when: {
+				branch: ['master'],
+			},
+		},
+		{
+			name: 'slack',
+			image: 'plugins/slack',
+			settings: {
+				webhook: {
+					from_secret: 'slack_webhook_beep',
+				},
 			},
 		},
 	],
 	depends_on: dockers,
 };
 
-const droneyml = [].concat(yamls).concat(deploy).map(yaml.safeDump).join('---\n');
+const droneyml = [].concat(sshTest).concat(yamls).concat(deploy).map(yaml.safeDump).join('---\n');
 
 fs.writeFileSync(path.join(cwd, '.drone.yml'), droneyml);
 console.log('Written to .drone.yml');
