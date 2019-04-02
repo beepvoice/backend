@@ -30,6 +30,9 @@ const yamls = dockers.map(f => ({
 				recursive: true,
 				submodule_override,
 			},
+			when: {
+				branch: ['master'],
+			},
 		},
 		{
 			name: 'docker',
@@ -74,6 +77,9 @@ const sshTest = {
 					'cd /home/core/staging && ls'
 				],
 			},
+			when: {
+				branch: ['master'],
+			},
 		},
 	],
 };
@@ -91,6 +97,9 @@ const deploy = {
 			settings: {
 				recursive: true,
 				submodule_override,
+			},
+			when: {
+				branch: ['master'],
 			},
 		},
 		{
@@ -155,6 +164,9 @@ const deploy = {
 				webhook: {
 					from_secret: 'slack_webhook_beep',
 				},
+			},
+			when: {
+				branch: ['master'],
 			},
 		},
 	],
