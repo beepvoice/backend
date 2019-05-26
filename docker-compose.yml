@@ -64,7 +64,7 @@ services:
 
   signal:
     build: ./backend-signal
-    tty: true
+    tty: false
     restart: unless-stopped
     environment:
       - PORT=80
