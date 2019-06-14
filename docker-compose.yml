@@ -88,6 +88,10 @@ services:
     build: ./backend-login
     tty: true
     restart: unless-stopped
+    depends_on:
+      - pg
+      - redis
+      - core
     environment:
       - LISTEN=:80
       - SECRET=secret
@@ -97,6 +101,7 @@ services:
       - MESSAGING_SID=MG19d18fafcff1f3f34dff04c5b04c0699
       - TWILIO_SID=AC22ea3eea85e5108a96b947aea8ab1320
       - TWILIO_TOKEN=fb23fa1a1564aa9f62a7a3117f07b3a0
+      - CORE_URL=http://core/user
     networks:
       - traefiknet
       - redisnet
