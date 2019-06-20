@@ -126,6 +126,22 @@ entrypoints = ["http", "https"]
   [frontends.transcription.routes.one]
   rule = "PathPrefixStrip: /transcription/"
 
+# pictures
+[backends.pictures]
+  [backends.pictures.servers.one]
+  url = "http://pictures"
+
+[frontends.pictures]
+backend = "pictures"
+entrypoints = ["http", "https"]
+  [frontends.pictures.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.pictures.routes.one]
+  rule = "PathPrefixStrip: /pictures/"
+
 # login
 [backends.login]
   [backends.login.servers.one]

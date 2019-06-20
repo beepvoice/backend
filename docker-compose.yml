@@ -33,6 +33,7 @@ services:
       - "5432:5432" # Close this for production
     networks:
       - pgnet
+
   nats:
     image: nats:latest
     ports: # Close these for production
@@ -48,6 +49,19 @@ services:
       - "6379:6379" # Close this for production
     networks:
       - redisnet
+
+  minio:
+    image: minio/minio:latest
+    environment:
+      - MINIO_ACCESS_KEY=MINIO_ID
+      - MINIO_SECRET_KEY=MINIO_KEY
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./files:/export
+    command: minio server /export
+    networks:
+      - minionet
 
   core:
     build: ./backend-core
@@ -118,6 +132,24 @@ services:
       - "10205:10205" # Remove this for production
     networks:
       - authnet
+
+  pictures:
+    build: ./backend-pictures
+    tty: true
+    restart: unless-stopped
+    depends_on:
+      - minio
+      - traefik
+    environment:
+      - LISTEN=:80
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ID=MINIO_ID
+      - MINIO_KEY=MINIO_KEY
+      - MINIO_BUCKET_NAME=beep
+      - MINIO_LOCATION=us-east-1
+    networks:
+      - traefiknet
+      - minionet
 
   # Pipeline
   bite:
@@ -192,3 +224,4 @@ networks:
   natsnet:
   redisnet:
   traefiknet:
+  minionet:
