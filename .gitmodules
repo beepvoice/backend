@@ -34,3 +34,6 @@
 [submodule "backend-pictures"]
 	path = backend-pictures
 	url = git@makerforce.io:beep/backend-pictures.git
+[submodule "backend-permissions"]
+	path = backend-permissions
+	url = git@makerforce.io:beep/backend-permissions.git
