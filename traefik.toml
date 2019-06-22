@@ -1,6 +1,16 @@
 [api]
 dashboard = true
 
+[acme]
+email = "letsencrypt+local@beepvoice.app"
+caServer = "https://acme-v02.api.letsencrypt.org/directory"
+acmeLogging = true
+storage = "acme.json"
+entryPoint = "https"
+  [acme.dnsChallenge]
+  provider = "digitalocean"
+  delayBeforeCheck = 3
+
 [entryPoints]
 [entryPoints.http]
 address = ":80"
@@ -8,8 +18,19 @@ address = ":80"
   address = "http://auth:10205/auth"
   trustForwardHeader = true
   authResponseHeaders = [ "X-User-Claim" ]
+[entryPoints.https]
+address = ":443"
+  [entryPoints.https.tls]
+  [entryPoints.https.auth.forward]
+  address = "http://auth:10205/auth"
+  trustForwardHeader = true
+  authResponseHeaders = [ "X-User-Claim" ]
+
 [entryPoints.login]
 address = ":1837"
+[entryPoints.login_https]
+address = ":1838"
+  [entryPoints.login_https.tls]
 [entryPoints.traefik]
 address = ":8080"
 
