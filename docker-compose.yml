@@ -151,6 +151,23 @@ services:
       - traefiknet
       - minionet
 
+  # Permissions
+  permissions:
+    build: ./backend-permissions
+    tty: true
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - pg
+    environment:
+      - LISTEN=:80
+      - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
+      - REDIS=redis:6379
+    networks:
+      - pgnet
+      - redisnet
+      - permissionsnet
+
   # Pipeline
   bite:
     build: ./backend-bite
@@ -225,3 +242,4 @@ networks:
   redisnet:
   traefiknet:
   minionet:
+  permissionsnet:
