@@ -106,6 +106,8 @@ services:
       - pg
       - redis
       - core
+    volumes:
+      - ${PWD}/key:/key
     environment:
       - LISTEN=:80
       - SECRET=secret
@@ -125,6 +127,8 @@ services:
     build: ./backend-auth
     tty: true
     restart: unless-stopped
+    volumes:
+      - ${PWD}/key.pub:/key.pub
     environment:
       - LISTEN=0.0.0.0:10205
       - SECRET=secret
