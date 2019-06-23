@@ -4,9 +4,6 @@
 [submodule "backend-core"]
 	path = backend-core
 	url = git@makerforce.io:beep/backend-core.git
-[submodule "backend-protobuf"]
-	path = backend-protobuf
-	url = git@makerforce.io:beep/backend-protobuf.git
 [submodule "backend-publish"]
 	path = backend-publish
 	url = git@makerforce.io:beep/backend-publish.git
