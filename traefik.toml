@@ -163,6 +163,23 @@ entrypoints = ["http", "https"]
   [frontends.pictures.routes.one]
   rule = "PathPrefixStrip: /pictures/"
 
+# webrtc
+[backends.webrtc]
+  [backends.webrtc.servers.one]
+  url = "http://webrtc"
+  [frontends.webrtc.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.webrtc.routes.one]
+  rule = "PathPrefixStrip: /webrtc/"
+
+[frontends.webrtc]
+backend = "webrtc"
+entrypoints = ["http", "https"]
+  
+
 # login
 [backends.login]
   [backends.login.servers.one]

@@ -12,6 +12,8 @@ services:
       - subscribe
       - transcription
       - auth
+      - pictures
+      - webrtc
     ports:
       - "80:80"
       - "443:443"
@@ -98,6 +100,15 @@ services:
       - redisnet
       - traefiknet
 
+  webrtc:
+    build: ./backend-webrtc
+    tty: true
+    restart: unless-stopped
+    environment:
+      - LISTEN=:80
+    networks:
+      - traefiknet
+
   login:
     build: ./backend-login
     tty: true
@@ -143,7 +154,6 @@ services:
     restart: unless-stopped
     depends_on:
       - minio
-      - traefik
     environment:
       - LISTEN=:80
       - MINIO_ENDPOINT=minio:9000
