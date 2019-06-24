@@ -34,3 +34,6 @@
 [submodule "backend-permissions"]
 	path = backend-permissions
 	url = git@makerforce.io:beep/backend-permissions.git
+[submodule "backend-webrtc"]
+	path = backend-webrtc
+	url = git@makerforce.io:beep/backend-webrtc.git
