@@ -131,22 +131,6 @@ entrypoints = ["http", "https"]
   [frontends.subscribe.routes.one]
   rule = "PathPrefixStrip: /subscribe/"
 
-# transcription
-[backends.transcription]
-  [backends.transcription.servers.one]
-  url = "http://transcription"
-
-[frontends.transcription]
-backend = "transcription"
-entrypoints = ["http", "https"]
-  [frontends.transcription.headers.customresponseheaders]
-  Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
-  Access-Control-Allow-Credentials = "true"
-  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
-  [frontends.transcription.routes.one]
-  rule = "PathPrefixStrip: /transcription/"
-
 # pictures
 [backends.pictures]
   [backends.pictures.servers.one]

@@ -10,7 +10,6 @@ services:
       - bite
       - publish
       - subscribe
-      - transcription
       - auth
       - pictures
       - webrtc
@@ -104,10 +103,14 @@ services:
     build: ./backend-webrtc
     tty: true
     restart: unless-stopped
+    depends_on:
+      - nats
     environment:
       - LISTEN=:80
+      - NATS=nats://nats:4222
     networks:
       - traefiknet
+      - natsnet
 
   login:
     build: ./backend-login
@@ -242,12 +245,10 @@ services:
     depends_on:
       - nats
     environment:
-      - LISTEN=:80
       - NATS=nats://nats:4222
       - API_KEY=AIzaSyDxSXDefzw9gXCQaVzOCYlRn_vcC9Da9Q0
     networks:
       - natsnet
-      - traefiknet
 
 networks:
   authnet:
