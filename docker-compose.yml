@@ -5,14 +5,11 @@ services:
     command: --configfile=/traefik.toml
     depends_on:
       - core
-      - signal
       - heartbeat
-      - bite
-      - publish
-      - subscribe
       - auth
       - pictures
       - webrtc
+      - store
     ports:
       - "80:80"
       - "443:443"
@@ -77,15 +74,6 @@ services:
       - pgnet
       - traefiknet
 
-  signal:
-    build: ./backend-signal
-    tty: false
-    restart: unless-stopped
-    environment:
-      - PORT=80
-    networks:
-      - traefiknet
-
   heartbeat:
     build: ./backend-heartbeat
     tty: true
@@ -98,19 +86,6 @@ services:
     networks:
       - redisnet
       - traefiknet
-
-  webrtc:
-    build: ./backend-webrtc
-    tty: true
-    restart: unless-stopped
-    depends_on:
-      - nats
-    environment:
-      - LISTEN=:80
-      - NATS=nats://nats:4222
-    networks:
-      - traefiknet
-      - natsnet
 
   login:
     build: ./backend-login
@@ -186,8 +161,8 @@ services:
       - permissionsnet
 
   # Pipeline
-  bite:
-    build: ./backend-bite
+  webrtc:
+    build: ./backend-webrtc
     tty: true
     restart: unless-stopped
     depends_on:
@@ -196,22 +171,8 @@ services:
       - LISTEN=:80
       - NATS=nats://nats:4222
     networks:
-      - natsnet
       - traefiknet
-
-  publish:
-    build: ./backend-publish
-    tty: true
-    restart: unless-stopped
-    depends_on:
-      - nats
-    environment:
-      - LISTEN=:80
-      - NATS=nats://nats:4222
-      - SECRET=secret
-    networks:
       - natsnet
-      - traefiknet
 
   store:
     build: ./backend-store
@@ -224,19 +185,6 @@ services:
       - DBPATH=/tmp/badger
     networks:
       - natsnet
-
-  subscribe:
-    build: ./backend-subscribe
-    tty: true
-    restart: unless-stopped
-    depends_on:
-      - nats
-    environment:
-      - LISTEN=:80
-      - NATS=nats://nats:4222
-    networks:
-      - natsnet
-      - traefiknet
 
   transcription:
     build: ./backend-transcription

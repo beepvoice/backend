@@ -51,22 +51,6 @@ entrypoints = ["http", "https"]
   [frontends.core.routes.one]
   rule = "PathPrefixStrip: /core/"
 
-# Signal
-[backends.signal]
-  [backends.signal.servers.one]
-  url = "http://signal"
-
-[frontends.signal]
-backend = "signal"
-entrypoints = ["http", "https"]
-  [frontends.signal.headers.customresponseheaders]
-  Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
-  Access-Control-Allow-Credentials = "true"
-  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
-  [frontends.signal.routes.one]
-  rule = "PathPrefixStrip: /signal/"
-
 # Heartbeat
 [backends.heartbeat]
   [backends.heartbeat.servers.one]
@@ -82,54 +66,6 @@ entrypoints = ["http", "https"]
   Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
   [frontends.heartbeat.routes.one]
   rule = "PathPrefixStrip: /heartbeat/"
-
-# Bite
-[backends.bite]
-  [backends.bite.servers.one]
-  url = "http://bite"
-
-[frontends.bite]
-backend = "bite"
-entrypoints = ["http", "https"]
-  [frontends.bite.headers.customresponseheaders]
-  Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
-  Access-Control-Allow-Credentials = "true"
-  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
-  [frontends.bite.routes.one]
-  rule = "PathPrefixStrip: /bite/"
-
-# Publish
-[backends.publish]
-  [backends.publish.servers.one]
-  url = "http://publish"
-
-[frontends.publish]
-backend = "publish"
-entrypoints = ["http", "https"]
-  [frontends.publish.headers.customresponseheaders]
-  Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
-  Access-Control-Allow-Credentials = "true"
-  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
-  [frontends.publish.routes.one]
-  rule = "PathPrefixStrip: /publish/"
-
-# Subscribe
-[backends.subscribe]
-  [backends.subscribe.servers.one]
-  url = "http://subscribe"
-
-[frontends.subscribe]
-backend = "subscribe"
-entrypoints = ["http", "https"]
-  [frontends.subscribe.headers.customresponseheaders]
-  Access-Control-Allow-Origin = "*"
-  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
-  Access-Control-Allow-Credentials = "true"
-  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
-  [frontends.subscribe.routes.one]
-  rule = "PathPrefixStrip: /subscribe/"
 
 # pictures
 [backends.pictures]
@@ -151,6 +87,10 @@ entrypoints = ["http", "https"]
 [backends.webrtc]
   [backends.webrtc.servers.one]
   url = "http://webrtc"
+
+[frontends.webrtc]
+backend = "webrtc"
+entrypoints = ["http", "https"]
   [frontends.webrtc.headers.customresponseheaders]
   Access-Control-Allow-Origin = "*"
   Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
@@ -159,10 +99,21 @@ entrypoints = ["http", "https"]
   [frontends.webrtc.routes.one]
   rule = "PathPrefixStrip: /webrtc/"
 
-[frontends.webrtc]
-backend = "webrtc"
+# store
+[backends.store]
+  [backends.store.servers.one]
+  url = "http://store"
+
+[frontends.store]
+backend = "store"
 entrypoints = ["http", "https"]
-  
+  [frontends.store.headers.customresponseheaders]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-User-Claim"
+  Access-Control-Allow-Credentials = "true"
+  Access-Control-Allow-Methods = "GET, HEAD, POST, PUT, PATCH, DELETE"
+  [frontends.store.routes.one]
+  rule = "PathPrefixStrip: /store/"
 
 # login
 [backends.login]

@@ -1,21 +1,9 @@
-[submodule "backend-bite"]
-	path = backend-bite
-	url = git@makerforce.io:beep/backend-bite.git
 [submodule "backend-core"]
 	path = backend-core
 	url = git@makerforce.io:beep/backend-core.git
-[submodule "backend-publish"]
-	path = backend-publish
-	url = git@makerforce.io:beep/backend-publish.git
-[submodule "backend-signal"]
-	path = backend-signal
-	url = git@makerforce.io:beep/backend-signal.git
 [submodule "backend-store"]
 	path = backend-store
 	url = git@makerforce.io:beep/backend-store.git
-[submodule "backend-subscribe"]
-	path = backend-subscribe
-	url = git@makerforce.io:beep/backend-subscribe.git
 [submodule "backend-transcription"]
 	path = backend-transcription
 	url = git@makerforce.io:beep/backend-transcription.git
