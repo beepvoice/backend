@@ -21,6 +21,7 @@ The microservices of Beep rely on a few background services, listed below. All o
 | `postgres` | [https://www.postgresql.org/] |
 | `redis` | [https://redis.io/] |
 | `nats` | [https://nats.io/] |
+| `minio` | [https://min.io]|
 
 ## Services
 
@@ -52,45 +53,51 @@ URL: `<base-url>/core`
 
 `core` relies on a running `postgres` instance. Is insecure if not behind `traefik` calling `auth`.
 
+### Heartbeat
+
+URL: `<base-url>/heartbeat`
+
+`heartbeat` handles "last seen" timings for users. A user pings the server periodically via a specific endpoint, which then caches the time of the ping while also updating subscribed clients. Clients subscribe through an EventSource endpoint. On first subscribe, the last cached time of the user in question is pushed to the EventSource stream.
+
+`heartbeat` relies on a running `redis` instance. Is insecure if not behind `traefik` calling `auth`.
+
+### Pictures
+
+URL: `<base-url>/pictures`
+
+`pictures` is a simple file upload server whose intended function is to just be a place to park user and group profile pictures.
+
+`pictures` relies on a running `minio` instance. Is insecure if not behind `traefik` calling `auth`.
+
+### Permissions
+
+`permissions` is an internal system meant to check a user's permission to access something. Currently uses a `user-scope` system, i.e. user-conversation. Since most things in the backend are related to conversations, the working basis of the permissions model is that if a user is in a conversation, they are pretty much good to go. Caches permissions in redis in a misguided attempt at reducing latency.
+
+`permissions` relies on a running `redis` instance.
+
 ### Bite pipeline
 
-Audio data in Beep is stored in discrete packets called "bites". The Bite pipeline takes in bites and processes them, doing things like storage and transcription to text. `publish` receives the bites, publishing them to `nats`, from which the processing services receive bite events. Output is then published again to `nats`, received by `subscribe` which pushes them as Server Sent Events.
+Audio data in Beep is stored in discrete packets called "bites". The Bite pipeline takes in bites and processes them, doing things like storage and transcription to text. Currently, in an downright terrible implementation, bites are just discrete 1400 byte chunks separated with absolutely no regard whatsoever to their content.
 
-#### `publish`
+#### `webrtc`
 
-URL: `<base-url>/publish`
+URL: `<base-url>/webrtc`
 
-`publish` accepts a POST request, containing a bite, and publishes it to NATs, to be received by services such as `bite` or `transcription`.
+`webrtc` is a WebRTC Selective Forwarding Unit (SFU) router, keeping track of which conversation a user is in and routing based on that. At the same time, it also diverts the bites to the bite pipeline and issues a store request to `store` at the same time.
 
-`publish` relies on a running `nats` instance. Is insecure if not behind `traefik` calling `auth`.
-
-#### `subscribe`
-
-URL: `<base-url>/subscribe`
-
-`subscribe` sits on the other end of the bite pipeline, waiting for responses returned by services along it. Each request pushed to the pipeline stores the user/client ID of the requester, and the client can subscribe to `subscribe` to receive the response.
-
-`subscribe` relies on a running `nats` instance. Is insecure if not behind `traefik` calling `auth`.
+`webrtc` relies on a running `nats` instance. Is insecure if not behind `traefik` calling `auth`.
 
 #### `store`
 
-`store` is a wrapper around [badger](https://github.com/dgraph-io/badger). Receives data through `nats`, generating keys based on a label supplied with the data. Also supports retrieval of specific data based on key, and scanning a range of keys based on timestamp.
+URL: `<base-url/store`
 
-`store` relies on a running `nats` instance.
+`store` is a wrapper around [badger](https://github.com/dgraph-io/badger). Receives data through `nats`, generating keys based on a label supplied with the data. Also supports retrieval of specific data based on key, and scanning a range of keys based on timestamp and supporting retrieval via HTTP endpoints.
 
-#### `bite`
-
-URL: `<base-url>/bite`
-
-`bite` stores raw audio data via `store`. Basically just acts as a forwarder to `store`, adding labels to the data and accepting HTTP requests to retrieve the data.
-
-`bite` relies on a running `nats` instance. Is insecure if not behind `traefik` calling `auth`.
+`store` relies on a running `nats` instance. Is insecure if not behind `traefik` calling `auth`.
 
 #### `transcription`
 
-URL: `<base-url>/transcription`
-
-`transcription` takes the raw audio data, packages it and then sends it to the [Google Cloud Speech-to-Text](https://cloud.google.com/speech-to-text/). Sends the transcripted result to `store` to be stored. Handles HTTP requests to retrieve transcriptions too.
+`transcription` takes the raw audio data, packages it and then sends it to the [Google Cloud Speech-to-Text](https://cloud.google.com/speech-to-text/). Sends the transcripted result to `store` to be stored.
 
 `transcription` relies on a running `nats` instance. Is insecure if not behind `traefik` calling `auth`.
 
