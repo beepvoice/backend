@@ -62,6 +62,7 @@ steps:
         backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
         backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
         backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
   - name: docker
     image: plugins/docker
     settings:
@@ -102,6 +103,7 @@ steps:
         backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
         backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
         backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
   - name: docker
     image: plugins/docker
     settings:
@@ -142,6 +144,7 @@ steps:
         backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
         backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
         backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
   - name: docker
     image: plugins/docker
     settings:
@@ -182,6 +185,7 @@ steps:
         backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
         backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
         backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
   - name: docker
     image: plugins/docker
     settings:
@@ -222,6 +226,7 @@ steps:
         backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
         backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
         backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
   - name: docker
     image: plugins/docker
     settings:
@@ -262,6 +267,7 @@ steps:
         backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
         backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
         backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
   - name: docker
     image: plugins/docker
     settings:
@@ -302,6 +308,7 @@ steps:
         backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
         backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
         backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
   - name: docker
     image: plugins/docker
     settings:
@@ -342,6 +349,7 @@ steps:
         backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
         backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
         backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
   - name: docker
     image: plugins/docker
     settings:
@@ -382,6 +390,7 @@ steps:
         backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
         backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
         backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
   - name: docker
     image: plugins/docker
     settings:
@@ -420,6 +429,7 @@ steps:
         backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
         backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
         backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+        backend-protobuf: 'https://git.makerforce.io/beep/backend-protobuf.git'
   - name: copy-docker-compose
     image: appleboy/drone-scp
     settings:
