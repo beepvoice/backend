@@ -6,10 +6,13 @@ const ini = require('ini');
 
 const gitmodules = ini.parse(fs.readFileSync('.gitmodules', 'utf-8'));
 const submodules = Object.values(gitmodules).map(m => m.path);
+/*
 const folders = fs.readdirSync(cwd, { withFileTypes: true });
 const dockers = folders.filter(f => 
 	f.isDirectory() && fs.readdirSync(path.join(cwd, f.name)).includes('Dockerfile')
 ).map(f => f.name);
+*/
+const dockers = submodules; // Assumption: All submodules have Docker. Should hold true
 
 const submodule_override = submodules.reduce((acc, f) => {
 	acc[f] = 'https://git.makerforce.io/beep/' + f + '.git';
