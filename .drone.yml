@@ -44,6 +44,366 @@ trigger:
     - pull_request
 ---
 kind: pipeline
+name: backend-core
+clone:
+  depth: 32
+steps:
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
+        backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
+        backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-core
+      context: backend-core
+      dockerfile: backend-core/Dockerfile
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+trigger:
+  branch:
+    - master
+  event:
+    - push
+    - tag
+    - promote
+    - rollback
+---
+kind: pipeline
+name: backend-store
+clone:
+  depth: 32
+steps:
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
+        backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
+        backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-store
+      context: backend-store
+      dockerfile: backend-store/Dockerfile
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+trigger:
+  branch:
+    - master
+  event:
+    - push
+    - tag
+    - promote
+    - rollback
+---
+kind: pipeline
+name: backend-transcription
+clone:
+  depth: 32
+steps:
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
+        backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
+        backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-transcription
+      context: backend-transcription
+      dockerfile: backend-transcription/Dockerfile
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+trigger:
+  branch:
+    - master
+  event:
+    - push
+    - tag
+    - promote
+    - rollback
+---
+kind: pipeline
+name: backend-login
+clone:
+  depth: 32
+steps:
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
+        backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
+        backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-login
+      context: backend-login
+      dockerfile: backend-login/Dockerfile
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+trigger:
+  branch:
+    - master
+  event:
+    - push
+    - tag
+    - promote
+    - rollback
+---
+kind: pipeline
+name: backend-heartbeat
+clone:
+  depth: 32
+steps:
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
+        backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
+        backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-heartbeat
+      context: backend-heartbeat
+      dockerfile: backend-heartbeat/Dockerfile
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+trigger:
+  branch:
+    - master
+  event:
+    - push
+    - tag
+    - promote
+    - rollback
+---
+kind: pipeline
+name: backend-auth
+clone:
+  depth: 32
+steps:
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
+        backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
+        backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-auth
+      context: backend-auth
+      dockerfile: backend-auth/Dockerfile
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+trigger:
+  branch:
+    - master
+  event:
+    - push
+    - tag
+    - promote
+    - rollback
+---
+kind: pipeline
+name: backend-pictures
+clone:
+  depth: 32
+steps:
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
+        backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
+        backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-pictures
+      context: backend-pictures
+      dockerfile: backend-pictures/Dockerfile
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+trigger:
+  branch:
+    - master
+  event:
+    - push
+    - tag
+    - promote
+    - rollback
+---
+kind: pipeline
+name: backend-permissions
+clone:
+  depth: 32
+steps:
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
+        backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
+        backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-permissions
+      context: backend-permissions
+      dockerfile: backend-permissions/Dockerfile
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+trigger:
+  branch:
+    - master
+  event:
+    - push
+    - tag
+    - promote
+    - rollback
+---
+kind: pipeline
+name: backend-webrtc
+clone:
+  depth: 32
+steps:
+  - name: submodule
+    image: plugins/git
+    settings:
+      recursive: true
+      submodule_override:
+        backend-core: 'https://git.makerforce.io/beep/backend-core.git'
+        backend-store: 'https://git.makerforce.io/beep/backend-store.git'
+        backend-transcription: 'https://git.makerforce.io/beep/backend-transcription.git'
+        backend-login: 'https://git.makerforce.io/beep/backend-login.git'
+        backend-heartbeat: 'https://git.makerforce.io/beep/backend-heartbeat.git'
+        backend-auth: 'https://git.makerforce.io/beep/backend-auth.git'
+        backend-pictures: 'https://git.makerforce.io/beep/backend-pictures.git'
+        backend-permissions: 'https://git.makerforce.io/beep/backend-permissions.git'
+        backend-webrtc: 'https://git.makerforce.io/beep/backend-webrtc.git'
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: registry.makerforce.io
+      repo: registry.makerforce.io/beep/backend-webrtc
+      context: backend-webrtc
+      dockerfile: backend-webrtc/Dockerfile
+      auto_tag: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+trigger:
+  branch:
+    - master
+  event:
+    - push
+    - tag
+    - promote
+    - rollback
+---
+kind: pipeline
 name: deploy
 steps:
   - name: submodule
@@ -108,4 +468,13 @@ trigger:
     - tag
     - promote
     - rollback
-depends_on: []
+depends_on:
+  - backend-core
+  - backend-store
+  - backend-transcription
+  - backend-login
+  - backend-heartbeat
+  - backend-auth
+  - backend-pictures
+  - backend-permissions
+  - backend-webrtc
