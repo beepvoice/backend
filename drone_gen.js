@@ -2,11 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const cwd = process.cwd();
 const yaml = require('js-yaml');
+const ini = require('ini');
 
+const gitmodules = ini.parse(fs.readFileSync('.gitmodules', 'utf-8'));
+const submodules = Object.values(gitmodules).map(m => m.path);
 const folders = fs.readdirSync(cwd, { withFileTypes: true });
-const submodules = folders.filter(f => 
-	f.isDirectory() && fs.readdirSync(path.join(cwd, f.name)).includes('.git')
-).map(f => f.name);
 const dockers = folders.filter(f => 
 	f.isDirectory() && fs.readdirSync(path.join(cwd, f.name)).includes('Dockerfile')
 ).map(f => f.name);
@@ -20,7 +20,7 @@ const yamls = dockers.map(f => ({
 	kind: 'pipeline',
 	name: f,
 	clone: {
-		depth: 1,
+		depth: 32,
 	},
 	steps: [
 		{
@@ -29,9 +29,6 @@ const yamls = dockers.map(f => ({
 			settings: {
 				recursive: true,
 				submodule_override,
-			},
-			when: {
-				branch: ['master'],
 			},
 		},
 		{
@@ -50,19 +47,17 @@ const yamls = dockers.map(f => ({
 					from_secret: 'docker_password',
 				},
 			},
-			when: {
-				branch: ['master'],
-			},
 		},
 	],
+	trigger: {
+		branch: ["master"],
+		event: ["push", "tag", "promote", "rollback"],
+	},
 }))
 
 const sshTest = {
 	kind: 'pipeline',
 	name: 'ssh-test',
-	clone: {
-		depth: 1,
-	},
 	steps: [
 		{
 			name: 'ssh',
@@ -77,19 +72,50 @@ const sshTest = {
 					'cd /home/core/staging && ls'
 				],
 			},
-			when: {
-				branch: ['master'],
-			},
 		},
 	],
+	trigger: {
+		branch: ["master"],
+		event: ["push", "tag", "promote", "rollback"],
+	},
+};
+
+const callSelf = {
+	kind: 'pipeline',
+	name: 'call-self',
+	steps: [
+		{
+			name: 'regenrate',
+			image: 'node:12-alpine',
+			commands: [
+				'yarn install',
+				'yarn generate',
+			],
+		},
+		{
+			name: 'push-or-fail',
+			image: 'appleboy/drone-git-push',
+			settings: {
+				remote_name: 'origin',
+				branch: '${DRONE_SOURCE_BRANCH}',
+				key: {
+					from_secret: 'push_ssh_key',
+				},
+				commit: true,
+				commit_message: '[SKIP CI] Automatically updating .drone.yml',
+			},
+			failure: 'ignore',
+		},
+	],
+	trigger: {
+		branch: ["master"],
+		event: ["pull_request"],
+	},
 };
 
 const deploy = {
 	kind: 'pipeline',
 	name: 'deploy',
-	clone: {
-		depth: 1,
-	},
 	steps: [
 		{
 			name: 'submodule',
@@ -97,9 +123,6 @@ const deploy = {
 			settings: {
 				recursive: true,
 				submodule_override,
-			},
-			when: {
-				branch: ['master'],
 			},
 		},
 		{
@@ -117,9 +140,6 @@ const deploy = {
 				],
 				target: '/home/core/staging',
 			},
-			when: {
-				branch: ['master'],
-			},
 		},
 		{
 			name: 'copy-migrations',
@@ -134,9 +154,6 @@ const deploy = {
 					'backend-core/postgres/*',
 				],
 				target: '/home/core/staging',
-			},
-			when: {
-				branch: ['master'],
 			},
 		},
 		{
@@ -153,9 +170,6 @@ const deploy = {
 					'cd /home/core/staging && /home/core/docker-compose -f docker-compose.staging.yml up -d',
 				],
 			},
-			when: {
-				branch: ['master'],
-			},
 		},
 		{
 			name: 'slack',
@@ -165,15 +179,16 @@ const deploy = {
 					from_secret: 'slack_webhook_beep',
 				},
 			},
-			when: {
-				branch: ['master'],
-			},
 		},
 	],
+	trigger: {
+		branch: ["master"],
+		event: ["push", "tag", "promote", "rollback"],
+	},
 	depends_on: dockers,
 };
 
-const droneyml = [].concat(sshTest).concat(yamls).concat(deploy).map(yaml.safeDump).join('---\n');
+const droneyml = [].concat(sshTest).concat(callSelf).concat(yamls).concat(deploy).map(yaml.safeDump).join('---\n');
 
 fs.writeFileSync(path.join(cwd, '.drone.yml'), droneyml);
 console.log('Written to .drone.yml');
