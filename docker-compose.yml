@@ -170,9 +170,11 @@ services:
     environment:
       - LISTEN=:80
       - NATS=nats://nats:4222
+      - PERMISSIONS_HOST=http://permissions
     networks:
       - traefiknet
       - natsnet
+      - permissionsnet
 
   store:
     build: ./backend-store
@@ -183,8 +185,11 @@ services:
     environment:
       - NATS=nats://nats:4222
       - DBPATH=/tmp/badger
+      - LISTEN=:80
+      - PERMISSIONS_HOST=http://permissions
     networks:
       - natsnet
+      - permissionsnet
 
   transcription:
     build: ./backend-transcription
