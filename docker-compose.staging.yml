@@ -2,7 +2,8 @@
 # Deployment
 #
 # Requirements
-# ./backend-core/postgres
+# ./backend-core/postgres/
+# ./keys/
 #
 
 version: "3"
@@ -37,6 +38,19 @@ services:
     networks:
       - redisnet
 
+  minio:
+    image: minio/minio:latest
+    environment:
+      - MINIO_ACCESS_KEY=insecure_access_key
+      - MINIO_SECRET_KEY=insecure_secret_key
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./files:/export
+    command: minio server /export
+    networks:
+      - minionet
+
   core:
     image: registry.makerforce.io/beep/backend-core:latest
     restart: unless-stopped
@@ -51,20 +65,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/core/
-      - traefik.frontend.auth.forward.address=http://auth:10205/auth
-      - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
-      - traefik.port=80
-
-  signal:
-    image: registry.makerforce.io/beep/backend-signal:latest
-    restart: unless-stopped
-    environment:
-      - PORT=80
-    networks:
-      - http
-    labels:
-      - traefik.enable=true
-      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/signal/
       - traefik.frontend.auth.forward.address=http://auth:10205/auth
       - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
       - traefik.port=80
@@ -92,13 +92,15 @@ services:
     restart: unless-stopped
     environment:
       - LISTEN=:80
-      - SECRET=secret
       - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
       - REDIS=redis:6379
       - TTL=120s
       - MESSAGING_SID=MG19d18fafcff1f3f34dff04c5b04c0699
       - TWILIO_SID=AC22ea3eea85e5108a96b947aea8ab1320
       - TWILIO_TOKEN=fb23fa1a1564aa9f62a7a3117f07b3a0
+      - CORE_URL=http://core/user
+    volumes:
+      - ./keys/key:/key:ro
     networks:
       - http
       - redisnet
@@ -113,45 +115,65 @@ services:
     restart: unless-stopped
     environment:
       - LISTEN=0.0.0.0:10205
-      - SECRET=secret
+    volumes:
+      - ./keys/key.pub:/key.pub:ro
     ports:
       - "10205:10205" # Remove this for production
     networks:
       - http
 
-  bite:
-    image: registry.makerforce.io/beep/backend-bite:latest
+  pictures:
+    image: registry.makerforce.io/beep/backend-pictures:latest
     restart: unless-stopped
     depends_on:
-      - nats
+      - minio
     environment:
       - LISTEN=:80
-      - NATS=nats://nats:4222
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ID=insecure_access_key
+      - MINIO_KEY=insecure_secret_key
+      - MINIO_BUCKET_NAME=beep
+      - MINIO_LOCATION=us-east-1
     networks:
-      - natsnet
-      - http
+      - minionet
     labels:
       - traefik.enable=true
-      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/bite/
+      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/pictures/
       - traefik.frontend.auth.forward.address=http://auth:10205/auth
       - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
       - traefik.port=80
 
-  publish:
-    image: registry.makerforce.io/beep/backend-publish:latest
+  permissions:
+    image: registry.makerforce.io/beep/backend-permissions:latest
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - pg
+    environment:
+      - LISTEN=:80
+      - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
+      - REDIS=redis:6379
+    networks:
+      - pgnet
+      - redisnet
+      - permissionsnet
+
+  webrtc:
+    image: registry.makerforce.io/beep/backend-webrtc:latest
     restart: unless-stopped
     depends_on:
       - nats
     environment:
       - LISTEN=:80
       - NATS=nats://nats:4222
-      - SECRET=secret
+      - PERMISSIONS_HOST=http://permissions
     networks:
       - natsnet
       - http
+      - permissionsnet
     labels:
       - traefik.enable=true
-      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/publish/
+      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/webrtc/
       - traefik.frontend.auth.forward.address=http://auth:10205/auth
       - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
       - traefik.port=80
@@ -164,50 +186,18 @@ services:
     environment:
       - NATS=nats://nats:4222
       - DBPATH=/tmp/badger
-    networks:
-      - natsnet
-
-  subscribe:
-    image: registry.makerforce.io/beep/backend-subscribe:latest
-    restart: unless-stopped
-    depends_on:
-      - nats
-    environment:
       - LISTEN=:80
-      - NATS=nats://nats:4222
+      - PERMISSIONS_HOST=http://permissions
     networks:
       - natsnet
-      - http
-    labels:
-      - traefik.enable=true
-      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/subscribe/
-      - traefik.frontend.auth.forward.address=http://auth:10205/auth
-      - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
-      - traefik.port=80
-
-  transcription:
-    image: registry.makerforce.io/beep/backend-transcription:latest
-    restart: unless-stopped
-    depends_on:
-      - nats
-    environment:
-      - LISTEN=:80
-      - NATS=nats://nats:4222
-      - API_KEY=AIzaSyDxSXDefzw9gXCQaVzOCYlRn_vcC9Da9Q0
-    networks:
-      - natsnet
-      - http
-    labels:
-      - traefik.enable=true
-      - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/transcription/
-      - traefik.frontend.auth.forward.address=http://auth:10205/auth
-      - traefik.frontend.auth.forward.authResponseHeaders=X-User-Claim
-      - traefik.port=80
+      - permissionsnet
 
 networks:
   pgnet:
   natsnet:
   redisnet:
+  minionet:
+  permissionsnet:
   http:
     external: 
       name: http
