@@ -13,10 +13,8 @@ services:
     image: postgres:10.3
     environment:
       - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=
+      - POSTGRES_PASSWORD=insecure_postgres_password
       - POSTGRES_DB=core
-    ports:
-      - "5432:5432" # Close this for production
     volumes:
       - ./backend-core/postgres:/docker-entrypoint-initdb.d:ro
     networks:
@@ -24,17 +22,11 @@ services:
 
   nats:
     image: nats:latest
-    ports: # Close these for production
-      - "4222:4222"
-      - "6222:6222"
-      - "8222:8222"
     networks:
       - natsnet
 
   redis:
     image: redis:latest
-    ports:
-      - "6379:6379" # Close this for production
     networks:
       - redisnet
 
@@ -43,8 +35,6 @@ services:
     environment:
       - MINIO_ACCESS_KEY=insecure_access_key
       - MINIO_SECRET_KEY=insecure_secret_key
-    ports:
-      - "9000:9000"
     volumes:
       - ./files:/export
     command: minio server /export
@@ -58,7 +48,7 @@ services:
       - pg
     environment:
       - LISTEN=:80
-      - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
+      - POSTGRES=postgresql://root:insecure_postgres_password@pg:5432/core?sslmode=disable
     networks:
       - pgnet
       - http
@@ -92,7 +82,7 @@ services:
     restart: unless-stopped
     environment:
       - LISTEN=:80
-      - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
+      - POSTGRES=postgresql://root:insecure_postgres_password@pg:5432/core?sslmode=disable
       - REDIS=redis:6379
       - TTL=120s
       - MESSAGING_SID=MG19d18fafcff1f3f34dff04c5b04c0699
@@ -117,8 +107,6 @@ services:
       - LISTEN=0.0.0.0:10205
     volumes:
       - ./keys/key.pub:/key.pub:ro
-    ports:
-      - "10205:10205" # Remove this for production
     networks:
       - http
 
@@ -151,7 +139,7 @@ services:
       - pg
     environment:
       - LISTEN=:80
-      - POSTGRES=postgresql://root@pg:5432/core?sslmode=disable
+      - POSTGRES=postgresql://root:insecure_postgres_password@pg:5432/core?sslmode=disable
       - REDIS=redis:6379
     networks:
       - pgnet
