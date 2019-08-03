@@ -11,6 +11,7 @@ services:
 
   pg:
     image: postgres:10.3
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=insecure_postgres_password
@@ -22,16 +23,19 @@ services:
 
   nats:
     image: nats:latest
+    restart: unless-stopped
     networks:
       - natsnet
 
   redis:
     image: redis:latest
+    restart: unless-stopped
     networks:
       - redisnet
 
   minio:
     image: minio/minio:latest
+    restart: unless-stopped
     environment:
       - MINIO_ACCESS_KEY=insecure_access_key
       - MINIO_SECRET_KEY=insecure_secret_key
