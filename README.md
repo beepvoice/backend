@@ -12,6 +12,21 @@ git submodule update --init --recursive
 docker-compose up --build
 ```
 
+## Testing
+
+Each microservice should have it's own integration and unit tests. Running integration tests should involve the following steps:
+
+```
+docker-compose -f docker-compose.integration.yml up
+go test -tags=integration
+```
+
+Unit tests are easier:
+
+```
+go test -tags=unit
+```
+
 ## Background services
 
 The microservices of Beep rely on a few background services, listed below. All of them are covered by the docker-compose file, but in case one wishes to run a service separately, they need to be provided. What a service needs is mentioned in its description.

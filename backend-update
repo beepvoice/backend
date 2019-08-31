@@ -42,5 +42,7 @@ url=$(http --check-status -b POST \
 	base=master head="$branch" \
 	title="$branch" | jq .html_url -r)
 
-echo "Merge the pull request for '$repo':"
+echo
+echo "Created a new pull request for '$repo':"
 echo "  $url"
+echo
