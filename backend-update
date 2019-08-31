@@ -2,10 +2,14 @@
 
 set -e
 
-branch="$1"
+. ~/.config/gitearc
+repo=beep/backend
 
-if [ -z $branch ]; then
-	echo "Usage: $0 type/short-description"
+branch="$1"
+message="$2"
+
+if [ -z $branch ] || [ $branch = "-h" ]; then
+	echo "Usage: $0 type/short-description [message]"
 	exit 1
 fi
 
@@ -19,3 +23,24 @@ updated=$(git diff master --name-status | cut -f 2)
 git commit -S -m "$branch: Bump $updated"
 git push --set-upstream origin "$branch"
 git checkout master
+
+echo "Creating pull request..."
+
+path_to_httpie=$(which http)
+if [ ! -x "$path_to_httpie" ] ; then
+	echo "HTTPie not installed. Please install it at (https://httpie.org/doc#installation)"
+fi
+
+path_to_jq=$(which jq)
+if [ ! -x "$path_to_jq" ] ; then
+	echo "JQ not installed. Please install it at (https://stedolan.github.io/jq/download/)"
+fi
+
+url=$(http --check-status -b POST \
+	$GITEA_URL/api/v1/repos/$repo/pulls \
+	Authorization:"token $GITEA_API_TOKEN" \
+	base=master head="$branch" \
+	title="$branch" | jq .html_url -r)
+
+echo "Merge the pull request for '$repo':"
+echo "  $url"
