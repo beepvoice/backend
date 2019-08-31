@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+branch="$1"
+
+if [ -z $branch ]; then
+	echo "Usage: $0 type/short-description"
+	exit 1
+fi
+
+git checkout master
+git checkout -b "$branch"
+
+git submodule foreach git pull origin master
+git add .
+updated=$(git diff master --name-status | cut -f 2)
+
+git commit -S -m "$branch: Bump $updated"
+git push --set-upstream origin "$branch"
+git checkout master
