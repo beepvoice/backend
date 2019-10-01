@@ -8,7 +8,7 @@ repo=beep/backend
 branch="$1"
 message="$2"
 
-if [ -z $branch ] || [ $branch = "-h" ]; then
+if [[ -z $branch ]] || [[ $branch = "-h" ]]; then
 	echo "Usage: $0 type/short-description [message]"
 	exit 1
 fi
