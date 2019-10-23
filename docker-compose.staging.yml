@@ -53,9 +53,11 @@ services:
     environment:
       - LISTEN=:80
       - POSTGRES=postgresql://root:insecure_postgres_password@pg:5432/core?sslmode=disable
+      - NATS=nats://nats:4222
     networks:
       - pgnet
       - http
+      - natsnet
     labels:
       - traefik.enable=true
       - traefik.frontend.rule=Host:staging.beepvoice.app;PathPrefixStrip:/core/
