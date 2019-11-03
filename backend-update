@@ -2,7 +2,7 @@
 
 set -e
 
-. ~/.config/gitearc
+. gitea-creds
 repo=beep/backend
 
 branch="$1"
